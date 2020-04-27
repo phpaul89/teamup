@@ -22,6 +22,7 @@ const hallSchema = new Schema({
   zip: { type: String },
   city: { type: String },
   // later: equipment, images, bezirke
+  // slotsBooked: { type: Schema.Types.ObjectId, ref: "Schedule" },
 });
 
 const Hall = mongoose.model("Hall", hallSchema);

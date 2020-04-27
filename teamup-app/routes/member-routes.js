@@ -54,10 +54,32 @@ router.get(
   async (request, response, next) => {
     console.log(request.params.id);
     const theHall = await Hall.findById(request.params.id);
+    const userTeams = await Team.find({ teamMembers: request.user._id });
+
+    const slots = ["8-9", "9-10", "10-11"];
+    const slotsBooked = await Hall.find(
+      { _id: request.params.id }.then(),
+      "slotsBooked"
+    ); // --> CHECK for correct query/logic
+
+    console.log(slotsBooked);
+    console.log(typeof slotsBooked);
+    console.log("---------");
+
+    const slotsAvailable = slots.filter((slot) => !slotsBooked.includes(slot));
+
     console.log(theHall);
-    response.render("member/detail.hbs", { hall: theHall });
+    console.log(userTeams);
+    console.log(slotsAvailable);
+    console.log(typeof slotsAvailable);
+    // response.render("member/detail.hbs", {
+    //   hall: theHall,
+    //   userTeams: userTeams,
+    // });
   }
 );
+
+router.post("/book-hall/:id");
 
 // router.post(
 //   "/book-hall/:id",

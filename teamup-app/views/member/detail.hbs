@@ -5,12 +5,25 @@
 <p>Category: Football, Handball</p>
 <p>Equipment: nets, goals,..</p>
 <p>Available slots:</p>
-<form action="/book-hall/{{_id}}" method="POST">
-  <label for="xyz">Choose date</label>
-  <input type="date" name="xyz">
+<form action="/book-hall/{{hall._id}}" method="POST">
+  <label for="bookingDate">Choose date</label>
+  <input type="date" name="bookingDate">
   <!-- dropdown here -->
   <select id="slots">
-    <option value="8to9">8 - 9</option>
+    <option value="8-9">8 - 9</option>
+    <option value="9-10">9 - 10</option>
+    <option value="10-11">10 - 11</option>
+    <option value="11-12">11 - 12</option>
+    <option value="12-13">12 - 13</option>
   </select>
+  <br><br>
+
+  <select id="teamBooking">
+    {{#each userTeams}}
+    <option value="{{_id}}">{{teamName}}</option>
+    {{/each}}
+  </select>
+
+  <br><br>
   <button type="submit">Book</button>
 </form>
