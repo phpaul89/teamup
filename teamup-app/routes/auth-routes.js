@@ -17,18 +17,6 @@ router.post("/signup", (request, response, next) => {
   // get username, password, email, then create user
   const { username, password, email } = request.body;
 
-  //console.log(username);
-
-  // existing user via username? yes, no -> if no: create User
-
-  /* if(USER exists){
-    console.log("user exists already");
-    return
-  } else {
-    ... create user somehow
-  }
-  */
-
   User.findOne({ username }).then((exists) => {
     if (exists !== null) {
       console.log("Username exists already");
@@ -61,7 +49,7 @@ router.get("/login", (request, response) => {
 router.post(
   "/login",
   passport.authenticate("local", {
-    successRedirect: "/", // redirect to private later
+    successRedirect: "/private",
     failureRedirect: "/login",
     failureFlash: true,
     passReqToCallback: true,

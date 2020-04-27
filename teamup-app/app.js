@@ -117,4 +117,10 @@ app.use("/", index);
 const auth = require("./routes/auth-routes.js");
 app.use("/", auth);
 
+const member = require("./routes/member-routes.js");
+app.use("/", member);
+
+const team = require("./routes/team-routes.js");
+app.use("/", team);
+
 module.exports = app;
