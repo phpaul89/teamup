@@ -8,6 +8,7 @@ const session = require("express-session");
 const User = require("../models/User-model.js");
 const Team = require("../models/Team-model.js");
 const Hall = require("../models/Hall-model.js");
+const Schedule = require("../models/Schedule-model.js");
 
 router.get(
   "/private",
@@ -56,30 +57,63 @@ router.get(
     const theHall = await Hall.findById(request.params.id);
     const userTeams = await Team.find({ teamMembers: request.user._id });
 
-    const slots = ["8-9", "9-10", "10-11"];
-    const slotsBooked = await Hall.find(
-      { _id: request.params.id }.then(),
-      "slotsBooked"
-    ); // --> CHECK for correct query/logic
+    // **const slots = ["8-9", "9-10", "10-11", "11-12", "12-13"];
+    // const slotsBooked = await Hall.find(
+    //   { _id: request.params.id }.then(),
+    //   "slotsBooked"
+    // ); // --> CHECK for correct query/logic
 
-    console.log(slotsBooked);
-    console.log(typeof slotsBooked);
-    console.log("---------");
+    // **const slotsBooked = ["8-9", "10-11"];
+    // **const slotsAvailable = slots.filter((slot) => !slotsBooked.includes(slot)); // works as intended
 
-    const slotsAvailable = slots.filter((slot) => !slotsBooked.includes(slot));
-
-    console.log(theHall);
-    console.log(userTeams);
-    console.log(slotsAvailable);
-    console.log(typeof slotsAvailable);
-    // response.render("member/detail.hbs", {
-    //   hall: theHall,
-    //   userTeams: userTeams,
-    // });
+    // console.log(theHall);
+    // console.log(userTeams);
+    // console.log(slotsAvailable);
+    // console.log(typeof slotsAvailable);
+    response.render("member/detail.hbs", {
+      hall: theHall,
+      userTeams: userTeams,
+    });
   }
 );
 
-router.post("/book-hall/:id");
+router.post(
+  "/book-hall/:id",
+  ensureLogin.ensureLoggedIn(),
+  async (request, response, next) => {
+    const hallId = request.params.id;
+    const { bookingDate, slots, teamBooking } = request.body;
+
+    console.log(bookingDate, slots, teamBooking, hallId);
+    const hallObjectId = await Hall.findOne({ _id: hallId });
+    console.log(hallObjectId);
+
+    const teamObjectId = await Team.findOne({ teamName: teamBooking });
+    console.log(teamObjectId);
+
+    Schedule.findOne({ _id: hallId }).then((exists) => {
+      if (exists !== null) {
+        console.log("Schedule exists already");
+        response.render("member/welcome.hbs"); //, {message: "Username already exists"});
+      } else {
+        Schedule.create({
+          date: bookingDate,
+          timeSlot: slots,
+          hall: hallObjectId,
+          team: teamObjectId,
+        })
+          .then((schedule) => {
+            console.log(schedule);
+            response.redirect("../views/member/welcome.hbs");
+          })
+          .catch((error) => {
+            console.log(error);
+            next();
+          });
+      }
+    });
+  }
+);
 
 // router.post(
 //   "/book-hall/:id",

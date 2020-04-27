@@ -16,7 +16,10 @@ const flash = require("connect-flash"); // error handling
 const User = require("./models/User-model.js");
 
 mongoose
-  .connect("mongodb://localhost/teamup-app", { useNewUrlParser: true })
+  .connect("mongodb://localhost/teamup-app", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then((x) => {
     console.log(
       `Connected to Mongo! Database name: "${x.connections[0].name}"`

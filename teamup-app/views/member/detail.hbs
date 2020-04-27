@@ -4,23 +4,23 @@
 <p>{{hall.city}}</p>
 <p>Category: Football, Handball</p>
 <p>Equipment: nets, goals,..</p>
+<br><br><br>
 <p>Available slots:</p>
 <form action="/book-hall/{{hall._id}}" method="POST">
   <label for="bookingDate">Choose date</label>
   <input type="date" name="bookingDate">
-  <!-- dropdown here -->
-  <select id="slots">
-    <option value="8-9">8 - 9</option>
-    <option value="9-10">9 - 10</option>
-    <option value="10-11">10 - 11</option>
-    <option value="11-12">11 - 12</option>
-    <option value="12-13">12 - 13</option>
+  <select id="slots" name="slots">
+    <option name="8-9">8 - 9</option>
+    <option name="9-10">9 - 10</option>
+    <option name="10-11">10 - 11</option>
+    <option name="11-12">11 - 12</option>
+    <option name="12-13">12 - 13</option>
   </select>
   <br><br>
 
-  <select id="teamBooking">
+  <select id="teamBooking" name="teamBooking">
     {{#each userTeams}}
-    <option value="{{_id}}">{{teamName}}</option>
+    <option name="{{_id}}">{{teamName}}</option>
     {{/each}}
   </select>
 
