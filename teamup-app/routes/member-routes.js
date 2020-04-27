@@ -73,6 +73,7 @@ router.get(
     response.render("member/detail.hbs", {
       hall: theHall,
       userTeams: userTeams,
+      message: request.flash("error"),
     });
   }
 );
@@ -81,20 +82,21 @@ router.post(
   "/book-hall/:id",
   ensureLogin.ensureLoggedIn(),
   async (request, response, next) => {
-    const hallId = request.params.id;
+    // get all required values for Schedule Schema:
     const { bookingDate, slots, teamBooking } = request.body;
-
-    console.log(bookingDate, slots, teamBooking, hallId);
-    const hallObjectId = await Hall.findOne({ _id: hallId });
-    console.log(hallObjectId);
-
+    // as 'hall' and 'team' requires 'Schema.Types.ObjectId' -> get whole Object:
+    const hallObjectId = await Hall.findOne({ _id: request.params.id });
     const teamObjectId = await Team.findOne({ teamName: teamBooking });
-    console.log(teamObjectId);
 
-    Schedule.findOne({ _id: hallId }).then((exists) => {
+    Schedule.findOne({
+      date: bookingDate,
+      timeSlot: slots,
+      hall: hallObjectId,
+      team: teamObjectId,
+    }).then((exists) => {
       if (exists !== null) {
         console.log("Schedule exists already");
-        response.render("member/welcome.hbs"); //, {message: "Username already exists"});
+        response.redirect("/private");
       } else {
         Schedule.create({
           date: bookingDate,
@@ -104,7 +106,7 @@ router.post(
         })
           .then((schedule) => {
             console.log(schedule);
-            response.redirect("../views/member/welcome.hbs");
+            response.redirect("/private");
           })
           .catch((error) => {
             console.log(error);
