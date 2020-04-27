@@ -8,6 +8,12 @@ const hbs = require("hbs");
 const mongoose = require("mongoose");
 const logger = require("morgan");
 const path = require("path");
+const bcrypt = require("bcrypt");
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+const session = require("express-session");
+const flash = require("connect-flash"); // error handling
+const User = require("./models/User-model.js");
 
 mongoose
   .connect("mongodb://localhost/teamup-app", { useNewUrlParser: true })
@@ -32,6 +38,60 @@ app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+// setup 'session' secret for authentication/login functionality
+app.use(
+  session({
+    // refer to '.env' for actual secret
+    secret: process.env.SESSION_SECRET,
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+
+//// Passport setup for authentication/login functionality, see lecture
+// '.serializeUser' is used to saved user id in the session
+passport.serializeUser((user, next) => {
+  next(null, user._id);
+});
+
+// '.deserializeUser' is used to retrieve the whole User object later via the user id in '.serializeUser'
+passport.deserializeUser((id, next) => {
+  User.findById(id)
+    .then((found) => next(null, found))
+    .catch((error) => {
+      console.log(error);
+      next();
+    });
+});
+
+app.use(flash());
+passport.use(
+  new LocalStrategy(
+    {
+      passReqToCallback: true,
+    },
+    (request, username, password, next) => {
+      User.findOne({ username })
+        .then((user) => {
+          if (!user) {
+            return next(null, false, { message: "Incorrect credentials" });
+          }
+          if (!bcrypt.compareSync(password, user.password)) {
+            return next(null, false, { message: "Incorrect credentials" });
+          }
+          return next(null, user);
+        })
+        .catch((error) => {
+          console.log(error);
+          next();
+        });
+    }
+  )
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Express View engine setup
 

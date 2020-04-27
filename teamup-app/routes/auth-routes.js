@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const bcryptSalt = 10;
+const passport = require("passport");
+const ensureLogin = require("connect-ensure-login");
+const session = require("express-session");
 const User = require("../models/User-model.js");
 
 // get URL /signup -> do stuff
@@ -41,7 +44,7 @@ router.post("/signup", (request, response, next) => {
       })
         .then((user) => {
           console.log(user);
-          //response.redirect("/login");
+          response.redirect("/login");
         })
         .catch((error) => {
           console.log(error);
@@ -49,6 +52,25 @@ router.post("/signup", (request, response, next) => {
         });
     }
   });
+});
+
+router.get("/login", (request, response) => {
+  response.render("auth/login.hbs", { message: request.flash("error") });
+});
+
+router.post(
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/", // redirect to private later
+    failureRedirect: "/login",
+    failureFlash: true,
+    passReqToCallback: true,
+  })
+);
+
+router.get("/logout", (request, response) => {
+  request.logout();
+  response.redirect("/");
 });
 
 module.exports = router;
