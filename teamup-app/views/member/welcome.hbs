@@ -1,6 +1,5 @@
 <h1>Welcome {{user.username}}!</h1>
 
-
 <div id="list-user">
   {{#each allUsers}}
   <p>{{username}}</p>
@@ -10,6 +9,21 @@
 <div id="list-team">
   {{#each allTeams}}
   <p>{{teamName}}</p>
+  <a href="/join-team/{{_id}}">Join this team</a>
+  {{/each}}
+</div>
+
+<div id="list-hall">
+  {{#each someHalls}}
+  <a href="/hall-detail/{{_id}}">{{name}}</a>
+  <p>{{address}}</p>
+
+
+  {{#if message}}
+  <div id="error-message">
+    {{message}}
+  </div>
+  {{/if}}
   {{/each}}
 </div>
 

@@ -1,0 +1,16 @@
+<h1>Hello at {{hall.name}}</h1>
+<p>{{hall.street}}</p>
+<p>{{hall.zip}}</p>
+<p>{{hall.city}}</p>
+<p>Category: Football, Handball</p>
+<p>Equipment: nets, goals,..</p>
+<p>Available slots:</p>
+<form action="/book-hall/{{_id}}" method="POST">
+  <label for="xyz">Choose date</label>
+  <input type="date" name="xyz">
+  <!-- dropdown here -->
+  <select id="slots">
+    <option value="8to9">8 - 9</option>
+  </select>
+  <button type="submit">Book</button>
+</form>
