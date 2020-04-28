@@ -1,3 +1,5 @@
+// jshint esversion:6
+
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
@@ -53,6 +55,34 @@ router.post(
     failureRedirect: "/login",
     failureFlash: true,
     passReqToCallback: true,
+  })
+);
+
+// LOGIN WITH GOOGLE (without sign up)
+router.get(
+  "/auth/google",
+  passport.authenticate("google", {
+    scope: [
+      "https://www.googleapis.com/auth/userinfo.profile",
+      "https://www.googleapis.com/auth/userinfo.email",
+    ],
+  })
+);
+router.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    successRedirect: "/private",
+    failureRedirect: "/", // here you would redirect to the login page using traditional login approach
+  })
+);
+
+// LOGIN WITH FACEBOOK (without sign up)
+router.get("/auth/facebook", passport.authenticate("facebook"));
+router.get(
+  "/auth/facebook/callback",
+  passport.authenticate("facebook", {
+    successRedirect: "/private",
+    failureRedirect: "/", // here you would redirect to the login page using traditional login approach
   })
 );
 
