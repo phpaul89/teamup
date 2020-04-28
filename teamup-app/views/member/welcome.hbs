@@ -16,7 +16,7 @@
   <br><br><br>
   <div id="list-hall">
     {{#each someHalls}}
-    <a href="/hall-detail/{{_id}}">{{name}}</a>
+    <a href="/hall-detail/{{_id}}" id="hallName">{{name}}</a>
     <p>{{address}}</p>
 
     {{#if message}}
@@ -39,7 +39,7 @@
       <label for="schedule-form">Choose time:</label>
       <select id="slots" name="slots">
         <option id="8-9" name="8-9">8 - 9</option>
-        <option id="9-10" name="9-10">9 - 10</option>
+        <option id="NineToTen" name="9-10">9 - 10</option>
         <option id="10-11" name="10-11">10 - 11</option>
         <option id="11-12" name="11-12">11 - 12</option>
         <option id="12-13" name="12-13">12 - 13</option>
@@ -93,15 +93,23 @@
   }
   document.querySelector("#testDate").onchange = (e) => {
     checkAvailability(e.target.value)
-    console.log(e.target.value)
+    //console.log(e.target.value)
   }
   async function checkAvailability(value) {
     let date = value;
+    let hallName = document.querySelector("#hallName").innerHTML;
 
-    let isAvailable = await axios.post("http://localhost:3000/spots", { date: date });
-    console.log("the backend response:", isAvailable);
+    let isAvailable = await axios.post("http://localhost:3000/spots", { date, hallName });
+    console.log("the backend response:", isAvailable.data);
 
-    // create route
+    let checkSlotNineToTen = document.querySelector("#NineToTen").value;
+    console.log("test check: ", checkSlotNineToTen);
+
+    if (isAvailable.data == checkSlotNineToTen) {
+      console.log("big success!");
+      document.querySelector("#NineToTen").disabled = true;
+    }
+
   }
 </script>
 

@@ -146,9 +146,22 @@ router.post(
   }
 );
 
-router.post("/spots", (req, res) => {
-  console.log(req.body);
-  res.send(req.body);
+router.post("/spots", async (request, response) => {
+  const { date, hallName } = request.body;
+  console.log(date, hallName);
+
+  const hallObjectId = await Hall.findOne({ name: hallName });
+
+  console.log(hallObjectId);
+
+  const timeSlotsFilled = await Schedule.findOne({
+    date: date,
+    hall: hallObjectId,
+  });
+
+  console.log(timeSlotsFilled.timeSlot);
+
+  response.send(timeSlotsFilled.timeSlot);
 });
 
 module.exports = router;
