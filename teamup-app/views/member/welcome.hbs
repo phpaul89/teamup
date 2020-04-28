@@ -34,16 +34,16 @@
     container: "map",
     style: "mapbox://styles/mapbox/light-v10",
     zoom: 10,
-    center: [13.4149, 52.5086]
+    center: [13.347489, 52.490202]
   });
 
   let geojson = {
     type: 'FeatureCollection',
     features: [{
-      type: 'Feature',
+      type: 'Point',
       geometry: {
         type: 'Point',
-        coordinates: [13.4149, 52.5086],
+        coordinates: [13.347489, 52.490202],
       }
     }]
   };
@@ -58,7 +58,7 @@
     // make a marker for each feature and add to the map
     new mapboxgl.Marker(el)
       .setLngLat(marker.geometry.coordinates)
-      .setPopup(new mapboxgl.Popup({ offset: 1 }) // add popups
+      .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
         .setHTML('test'))
       .addTo(map);
   });
