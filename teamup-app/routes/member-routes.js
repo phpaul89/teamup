@@ -5,6 +5,7 @@ const bcryptSalt = 10;
 const passport = require("passport");
 const ensureLogin = require("connect-ensure-login");
 const session = require("express-session");
+const axios = require("axios");
 const User = require("../models/User-model.js");
 const Team = require("../models/Team-model.js");
 const Hall = require("../models/Hall-model.js");
@@ -25,6 +26,47 @@ router.get(
     });
   }
 );
+
+router.get("/get-marker", async (request, response) => {
+  // '.lean()' has to be added to be able to push coordinates as a new property in 'getCoordinates()'
+  const someHalls = await Hall.find().lean();
+  let updatedHalls = [];
+
+  console.log("1");
+  console.log("Here: ", updatedHalls);
+
+  let token =
+    "pk.eyJ1IjoicGhwYXVsODkiLCJhIjoiY2s5anB3dnAxMDBjdzNlcDk3ZXNjb2VqNiJ9.3F5ihEH6D8CIfUm_WN1yvw";
+
+  let query = (street, city, zip, token) => {
+    return `https://api.mapbox.com/geocoding/v5/mapbox.places/${street}_${city}_${zip}.json?types=address&access_token=${token}`;
+  };
+
+  console.log("2");
+
+  async function getCoordinates(halls) {
+    for (let hall of halls) {
+      const {
+        data: { features },
+      } = await axios.get(query(hall.street, hall.city, hall.zip, token));
+      hall["coordinates"] = features[0].center;
+      //console.log("got coordinates: ", hall.coordinates);
+      //console.log("new hall: ", hall);
+      updatedHalls.push(hall);
+    }
+    return null;
+  }
+
+  console.log("3");
+
+  await getCoordinates(someHalls);
+
+  console.log("4");
+  //console.log("Here again: ", updatedHalls);
+  console.log(updatedHalls);
+
+  response.send(updatedHalls);
+});
 
 router.get(
   "/join-team/:id",
@@ -56,20 +98,6 @@ router.get(
     console.log(request.params.id);
     const theHall = await Hall.findById(request.params.id);
     const userTeams = await Team.find({ teamMembers: request.user._id });
-
-    // **const slots = ["8-9", "9-10", "10-11", "11-12", "12-13"];
-    // const slotsBooked = await Hall.find(
-    //   { _id: request.params.id }.then(),
-    //   "slotsBooked"
-    // ); // --> CHECK for correct query/logic
-
-    // **const slotsBooked = ["8-9", "10-11"];
-    // **const slotsAvailable = slots.filter((slot) => !slotsBooked.includes(slot)); // works as intended
-
-    // console.log(theHall);
-    // console.log(userTeams);
-    // console.log(slotsAvailable);
-    // console.log(typeof slotsAvailable);
 
     response.render("member/detail.hbs", {
       hall: theHall,
@@ -117,5 +145,10 @@ router.post(
     });
   }
 );
+
+router.post("/spots", (req, res) => {
+  console.log(req.body);
+  res.send(req.body);
+});
 
 module.exports = router;
