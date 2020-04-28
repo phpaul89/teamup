@@ -126,4 +126,7 @@ app.use("/", member);
 const team = require("./routes/team-routes.js");
 app.use("/", team);
 
+const dom = require("./routes/dom-routes.js");
+app.use("/", dom);
+
 module.exports = app;

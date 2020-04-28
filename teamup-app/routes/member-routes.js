@@ -70,6 +70,7 @@ router.get(
     // console.log(userTeams);
     // console.log(slotsAvailable);
     // console.log(typeof slotsAvailable);
+
     response.render("member/detail.hbs", {
       hall: theHall,
       userTeams: userTeams,
@@ -116,17 +117,5 @@ router.post(
     });
   }
 );
-
-// router.post(
-//   "/book-hall/:id",
-//   ensureLogin.ensureLoggedIn(),
-//   (request, response, next) => {
-//     console.log(request.params.id); // hallID
-//     console.log(request.user.id); // userID
-//     const { xyz } = request.body;
-//     console.log(xyz);
-//     // works
-//   }
-// );
 
 module.exports = router;

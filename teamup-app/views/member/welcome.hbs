@@ -25,5 +25,45 @@
   {{/if}}
   {{/each}}
 </div>
+<br><br>
+<div id='map' style='width: 600px; height: 400px;'></div>
+<script>
+  mapboxgl.accessToken = "pk.eyJ1IjoicGhwYXVsODkiLCJhIjoiY2s5anB3dnAxMDBjdzNlcDk3ZXNjb2VqNiJ9.3F5ihEH6D8CIfUm_WN1yvw";
+  /* Map: This represents the map on the page. */
+  let map = new mapboxgl.Map({
+    container: "map",
+    style: "mapbox://styles/mapbox/light-v10",
+    zoom: 10,
+    center: [13.4149, 52.5086]
+  });
 
-<!-- categories of sport arts to be added later -->
+  let geojson = {
+    type: 'FeatureCollection',
+    features: [{
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [13.4149, 52.5086],
+      }
+    }]
+  };
+
+  // add markers to map
+  geojson.features.forEach(function (marker) {
+
+    // create a HTML element for each feature
+    var el = document.createElement('div');
+    el.className = 'marker';
+
+    // make a marker for each feature and add to the map
+    new mapboxgl.Marker(el)
+      .setLngLat(marker.geometry.coordinates)
+      .setPopup(new mapboxgl.Popup({ offset: 1 }) // add popups
+        .setHTML('test'))
+      .addTo(map);
+  });
+</script>
+
+
+<!-- categories of sport arts to be added later 
+[13.3475059, 52.4902439]-->

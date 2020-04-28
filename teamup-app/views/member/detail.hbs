@@ -7,17 +7,18 @@
 <br><br><br>
 <p>Available slots:</p>
 <form action="/book-hall/{{hall._id}}" method="POST">
-  <label for="bookingDate">Choose date</label>
-  <input type="date" name="bookingDate">
+  <label for="bookingDate">Choose date:</label>
+  <input type="date" id="bookingDate" name="bookingDate"><br><br>
+  <label for="slots">Choose time:</label>
   <select id="slots" name="slots">
-    <option name="8-9">8 - 9</option>
-    <option name="9-10">9 - 10</option>
-    <option name="10-11">10 - 11</option>
-    <option name="11-12">11 - 12</option>
-    <option name="12-13">12 - 13</option>
+    <option id="8-9" name="8-9">8 - 9</option>
+    <option id="9-10" name="9-10">9 - 10</option>
+    <option id="10-11" name="10-11">10 - 11</option>
+    <option id="11-12" name="11-12">11 - 12</option>
+    <option id="12-13" name="12-13">12 - 13</option>
   </select>
   <br><br>
-
+  <label for="teamBooking">Choose team:</label>
   <select id="teamBooking" name="teamBooking">
     {{#each userTeams}}
     <option name="{{_id}}">{{teamName}}</option>
