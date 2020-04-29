@@ -20,6 +20,8 @@ const userSchema = new Schema(
     email: { type: String },
     googleID: { type: String },
     facebookId: { type: String },
+    friends: { type: Schema.Types.ObjectId, ref: "User" },
+    myTeams: { type: Schema.Types.ObjectId, ref: "Team" },
     // googleID: { type: Schema.Types.ObjectId, ref: "User" },
     // facebookId: { type: Schema.Types.ObjectId, ref: "User" },
   },

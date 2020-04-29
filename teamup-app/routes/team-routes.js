@@ -1,3 +1,5 @@
+// jshint esversion:8
+
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
@@ -27,7 +29,7 @@ router.post("/team-signup", (request, response, next) => {
       })
         .then((team) => {
           console.log(team);
-          response.redirect("/");
+          response.redirect("/private");
         })
         .catch((error) => {
           console.log(error);
@@ -36,5 +38,41 @@ router.post("/team-signup", (request, response, next) => {
     }
   });
 });
+
+// all teams
+router.get(
+  "/private/allteams",
+  ensureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    const allTeams = await Team.find();
+    //const allUsers = await User.find();
+    response.render("team/all-teams.hbs", {
+      allTeams: allTeams,
+      //allUsers: allUsers,
+    });
+  }
+);
+
+router.post(
+  "/private/allteams",
+  ensureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    const team = request.body;
+    const teamObjectId = await Team.findOne({ teamName: team });
+    console.log("team", team);
+    console.log("team Object Id", teamObjectId);
+
+    // const loggedInUser = request.user;
+    // console.log("logged In User", loggedInUser);
+    // console.log("logged In User Id", loggedInUser._id);
+
+    // User.updateOne(
+    //   { _id: loggedInUser._id },
+    //   { $push: { myTeams: teamObjectId } }
+    // ).then((user) => {
+    //   console.log(user);
+    // });
+  }
+);
 
 module.exports = router;

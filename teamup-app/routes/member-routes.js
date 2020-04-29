@@ -1,3 +1,5 @@
+// jshint esversion:8
+
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
@@ -11,18 +13,61 @@ const Team = require("../models/Team-model.js");
 const Hall = require("../models/Hall-model.js");
 const Schedule = require("../models/Schedule-model.js");
 
+// welcome page
 router.get(
-  "/private",
+  "/private", // welcome.hbs
   ensureLogin.ensureLoggedIn(),
   async (request, response) => {
-    const allUsers = await User.find({});
+    const allUsers = await User.find({}); // add the property friends
     const allTeams = await Team.find({});
     const someHalls = await Hall.find();
+    const friends = await User.find({ _id: request.user._id }).populate(
+      "friends"
+    );
+    console.log(request.user.friends);
     response.render("member/welcome.hbs", {
       user: request.user,
       allUsers: allUsers,
       allTeams: allTeams,
       someHalls: someHalls,
+      friends: friends,
+    });
+  }
+);
+
+// all members
+router.get(
+  "/private/allmembers",
+  ensureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    const allUsers = await User.find();
+    response.render("member/all-members.hbs", {
+      allUsers: allUsers,
+    });
+  }
+);
+
+// add friends
+router.get("/addfriend", (request, response) => {
+  response.render("member/add-friends.hbs");
+});
+
+router.post(
+  "/addfriends",
+  ensureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    const friend = request.body.friend;
+    const friendObjectId = await User.findOne({ username: friend });
+    console.log(friendObjectId);
+    console.log(friend);
+    const loggedInUser = request.user;
+    console.log(loggedInUser);
+    console.log(loggedInUser._id);
+    User.updateOne(
+      { _id: loggedInUser._id },
+      { $push: { friends: friendObjectId } }
+    ).then((user) => {
+      console.log(user);
     });
   }
 );
