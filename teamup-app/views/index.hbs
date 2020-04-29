@@ -1,5 +1,55 @@
-<h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
-<a href="/signup">Sign up</a>
-<a href="/login">Login</a>
-<a href="/logout">Logout</a> <!-- for testing purposes here -->
+<nav class="nav-bar">
+  <ul>
+    <li><a href="/">TeamUp</a></li>
+    <li><a href="/signup">Sign up</a></li>
+    <li><a href="/login">Log in</a></li>
+  </ul>
+</nav>
+
+<section>
+  <h1>Do you want to play an indoor team sport in Berlin?</h1>
+  <h3>In this city, you have plenty of opportunities</h3>
+  <p>Here is a map of the available sports halls:</p>
+  <div class="map">map</div>
+</section>
+
+<section>
+  <h2>However, if you would like to play any kind of team sport, first you need a team.</h2>
+  <h3>With the help of TeamUp you can:</h3>
+  <ol>
+    <li>Find the people who would like to play the same sport as you</li>
+    <li>Create or join a team</li>
+    <li>Find a sports hall in your neighborhood with the desired equipment (e.g. football/handball goals, basketball
+      basket, volleyball net...)</li>
+    <li>Book the sports hall closest to you and play with your team</li>
+  </ol>
+</section>
+
+<section>
+  <h3>All you need to do is to sign up or log in, TeamUp helps you to
+    organize the rest.</h3>
+  <a href="/signup" class="link-btn">Sign up</a>
+  <a href="/login" class="link-btn">Log in</a>
+</section>
+
+<br>
+
+{{!-- GOOGLE LOGIN --}}
+{{#unless user}}
+<div>
+  <a href="/auth/google">Login With Google</a>
+</div>
+{{/unless}}
+
+<br>
+
+{{!-- FACEBOOK LOGIN --}}
+{{#unless user}}
+<div>
+  <a href="/auth/facebook">Login With Facebook</a>
+</div>
+{{/unless}}
+
+<br>
+
+<a href="/logout">Log out</a> <!-- for testing purposes here -->
