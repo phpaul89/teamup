@@ -6,38 +6,46 @@
   </ul>
 </nav>
 
-<section>
-  <h1>Do you want to play an indoor team sport in Berlin?</h1>
-  <h3>In this city, you have plenty of opportunities</h3>
-  <p>Here is a map of the available sports halls:</p>
-  <div class="map">map</div>
+<section class="text-top">
+  <h2>Do you want to play an indoor football in Berlin?</h2>
+  <h4>In this city, you have plenty of opportunities</h4>
+  <p>Here is a map of the available sports halls where you can play:</p>
+
 </section>
 
-<section>
-  <h2>However, if you would like to play any kind of team sport, first you need a team.</h2>
-  <h3>With the help of TeamUp you can:</h3>
+
+<div class="index-map">
+  map
+</div>
+
+
+<section class="text-middle">
+  <h4>However, if you would like to play any kind of team sport, first you need a team.</h4>
+  <h4>With the help of TeamUp you can:</h4>
   <ol>
     <li>Find the people who would like to play the same sport as you</li>
     <li>Create or join a team</li>
-    <li>Find a sports hall in your neighborhood with the desired equipment (e.g. football/handball goals, basketball
-      basket, volleyball net...)</li>
+    <li>Find a sports hall in your neighborhood</li>
     <li>Book the sports hall closest to you and play with your team</li>
   </ol>
 </section>
 
-<section>
+<section class="signup-login">
   <h3>All you need to do is to sign up or log in, TeamUp helps you to
     organize the rest.</h3>
+</section>
+
+<div>
   <a href="/signup" class="link-btn">Sign up</a>
   <a href="/login" class="link-btn">Log in</a>
-</section>
+</div>
 
 <br>
 
 {{!-- GOOGLE LOGIN --}}
 {{#unless user}}
 <div>
-  <a href="/auth/google">Login With Google</a>
+  <a href="/auth/google" class="google-btn">Login With Google</a>
 </div>
 {{/unless}}
 
@@ -46,7 +54,7 @@
 {{!-- FACEBOOK LOGIN --}}
 {{#unless user}}
 <div>
-  <a href="/auth/facebook">Login With Facebook</a>
+  <a href="/auth/facebook" class="fb-btn">Login With Facebook</a>
 </div>
 {{/unless}}
 
