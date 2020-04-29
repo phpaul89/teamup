@@ -88,9 +88,11 @@
   }
 
   test();
-  document.querySelector("#slots").onchange = (e) => {
+
+  /*document.querySelector("#slots").onchange = (e) => {
     console.log(e.target.value)
-  }
+  }*/
+
   document.querySelector("#testDate").onchange = (e) => {
     checkAvailability(e.target.value)
     //console.log(e.target.value)

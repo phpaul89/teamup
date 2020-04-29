@@ -1,0 +1,79 @@
+<h1>Demo for Styling</h1>
+<a href="/#" id="hallName">Archenhold-Gymnasium</a>
+
+<div id="main">
+  <div id="top">
+    <p>Navbar</p>
+  </div>
+  <div id="center">
+    <div id="left-area">
+      <div id="friends">
+
+      </div>
+      <div id="teams">
+
+      </div>
+    </div>
+    <div id="right-area">
+      <div id="text">
+        <p>some text</p>
+      </div>
+      <div id="map-a">
+        <p>some map</p>
+        <div id="dummy-map">
+          <div id='map' style='width: 200px; height: 200px;'></div>
+        </div>
+      </div>
+      <div id="schedule">
+        <p>some schedule</p>
+        <form id="schedule-form" action="/#" method="POST">
+          <label for="testDate">Choose date:</label>
+          <input type="date" id="testDate" name="testDate"><br><br>
+          <label for="schedule-form">Choose time:</label>
+          <select id="scheduleTimeSlotsMenu" name="slots">
+            <option id="optionInSchedule_SixTeenToSeventeen" name="8-9">16 - 17</option>
+            <option id="optionInSchedule_SeventeenToEighteen" name="9-10">17 - 18</option>
+            <option id="optionInScheduleTenToEleven" name="10-11">18 - 19</option>
+            <option id="optionInScheduleElevenToTwelve" name="11-12">19 - 20</option>
+            <option id="optionInScheduleTwelveToThirteen" name="12-13">20 - 21</option>
+            <option id="optionInScheduleTwelveToThirteen" name="12-13">21 - 22</option>
+          </select>
+          <br><br>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  // MapBox start
+  // basic MapBox for now
+  // adapt newer code for iterating through database later
+  mapboxgl.accessToken = "pk.eyJ1IjoicGhwYXVsODkiLCJhIjoiY2s5anB3dnAxMDBjdzNlcDk3ZXNjb2VqNiJ9.3F5ihEH6D8CIfUm_WN1yvw";
+  var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v9'
+  });
+  // MapBox end
+
+  // Schedule start
+  document.querySelector("#testDate").onchange = (e) => {
+    checkAvailability(e.target.value)
+    //console.log(e.target.value)
+  }
+  async function checkAvailability(value) {
+    let date = value;
+    let hallName = document.querySelector("#hallName").innerHTML;
+
+    let isAvailable = await axios.post("http://localhost:3000/spots", { date, hallName });
+    console.log("the backend response:", isAvailable.data);
+
+    let checkSlotNineToTen = document.querySelector("#optionInSchedule_SeventeenToEighteen").value;
+    console.log("test check: ", checkSlotNineToTen);
+
+    if (isAvailable.data == checkSlotNineToTen) {
+      console.log("big success!");
+      document.querySelector("#optionInSchedule_SeventeenToEighteen").disabled = true;
+    }
+  }
+  // Schedule end
+</script>
