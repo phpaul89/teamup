@@ -6,6 +6,7 @@ body {
 a {
   color: #00b7ff; }
 
+
 .nav-bar {
   background-color: #43a3e7;
   padding: 1vh 0 1vh 0; }
@@ -42,8 +43,21 @@ a {
   text-decoration: none;
   padding: 10px 30px 10px 30px; }
 
+#detail-panel {
+  display: flex;
+  flex-direction: column; }
+
+.geocoder {
+  position: relative;
+  z-index: 1;
+  width: 50%;
+  left: 15%;
+  margin-left: 0;
+  margin-bottom: 2%; }
+
+
 .marker {
-  background-image: url("/public/images/mapbox-icon.png");
+  background-image: url("../images/mapbox_marker_icon_2.png");
   background-size: cover;
   width: 50px;
   height: 50px;

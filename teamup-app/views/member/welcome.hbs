@@ -1,67 +1,116 @@
 <h1>Welcome {{user.username}}!</h1>
-
-<div id="list-user">
-  {{#each allUsers}}
-  <p>{{username}}</p>
-  {{/each}}
-</div>
-<br><br>
-<div id="list-team">
-  {{#each allTeams}}
-  <p>{{teamName}}</p>
-  <a href="/join-team/{{_id}}">Join this team</a>
-  {{/each}}
-</div>
-<br><br><br>
-<div id="list-hall">
-  {{#each someHalls}}
-  <a href="/hall-detail/{{_id}}">{{name}}</a>
-  <p>{{address}}</p>
-
-  {{#if message}}
-  <div id="error-message">
-    {{message}}
+<a href="/get-marker">GET MARKER TEST</a>
+<div id="detail-panel">
+  <div id="list-user">
+    {{#each allUsers}}
+    <p>{{username}}</p>
+    {{/each}}
   </div>
-  {{/if}}
-  {{/each}}
+  <br><br>
+  <div id="list-team">
+    {{#each allTeams}}
+    <p>{{teamName}}</p>
+    <a href="/join-team/{{_id}}">Join this team</a>
+    {{/each}}
+  </div>
+  <br><br><br>
+  <div id="list-hall">
+    {{#each someHalls}}
+    <a href="/hall-detail/{{_id}}" id="hallName">{{name}}</a>
+    <p>{{address}}</p>
+
+    {{#if message}}
+    <div id="error-message">
+      {{message}}
+    </div>
+    {{/if}}
+    {{/each}}
+  </div>
+  <br><br>
+  <div id="map-panel">
+    <div id="geocoder" class="geocoder"></div>
+    <div id='map' style='width: 600px; height: 400px;'></div>
+  </div>
+  <div id="schedule-panel">
+    <br><br>
+    <form id="schedule-form" action="/#" method="POST">
+      <label for="testDate">Choose date:</label>
+      <input type="date" id="testDate" name="testDate"><br><br>
+      <label for="schedule-form">Choose time:</label>
+      <select id="slots" name="slots">
+        <option id="8-9" name="8-9">8 - 9</option>
+        <option id="NineToTen" name="9-10">9 - 10</option>
+        <option id="10-11" name="10-11">10 - 11</option>
+        <option id="11-12" name="11-12">11 - 12</option>
+        <option id="12-13" name="12-13">12 - 13</option>
+      </select>
+      <br><br>
+    </form>
+  </div>
 </div>
-<br><br>
-<div id='map' style='width: 600px; height: 400px;'></div>
 <script>
-  mapboxgl.accessToken = "pk.eyJ1IjoicGhwYXVsODkiLCJhIjoiY2s5anB3dnAxMDBjdzNlcDk3ZXNjb2VqNiJ9.3F5ihEH6D8CIfUm_WN1yvw";
-  /* Map: This represents the map on the page. */
-  let map = new mapboxgl.Map({
-    container: "map",
-    style: "mapbox://styles/mapbox/light-v10",
-    zoom: 10,
-    center: [13.4149, 52.5086]
-  });
+  async function test() {
 
-  let geojson = {
-    type: 'FeatureCollection',
-    features: [{
-      type: 'Feature',
-      geometry: {
-        type: 'Point',
-        coordinates: [13.4149, 52.5086],
-      }
-    }]
-  };
+    mapboxgl.accessToken =
+      "pk.eyJ1IjoicGhwYXVsODkiLCJhIjoiY2s5anB3dnAxMDBjdzNlcDk3ZXNjb2VqNiJ9.3F5ihEH6D8CIfUm_WN1yvw";
+    /* Map: This represents the map on the page. */
+    let map = new mapboxgl.Map({
+      container: "map",
+      style: "mapbox://styles/mapbox/light-v10",
+      zoom: 10,
+      center: [13.347489, 52.490202],
+    });
 
-  // add markers to map
-  geojson.features.forEach(function (marker) {
+    let geojson = await axios.get("http://localhost:3000/get-marker");
 
-    // create a HTML element for each feature
-    var el = document.createElement('div');
-    el.className = 'marker';
+    // add markers to map
+    geojson.data.forEach((hall) => {
+      // create a HTML element for each feature
+      var el = document.createElement("div");
+      el.className = "marker";
 
-    // make a marker for each feature and add to the map
-    new mapboxgl.Marker(el)
-      .setLngLat(marker.geometry.coordinates)
-      .setPopup(new mapboxgl.Popup({ offset: 1 }) // add popups
-        .setHTML('test'))
-      .addTo(map);
-  });
+      // make a marker for each feature and add to the map
+      new mapboxgl.Marker(el)
+        .setLngLat(hall.coordinates)
+        .setPopup(
+          new mapboxgl.Popup({ offset: 25 }) // add popups
+            .setHTML(`Name: ${hall.name}`)
+        )
+        .addTo(map);
+    });
+
+    var geocoder = new MapboxGeocoder({
+      accessToken: mapboxgl.accessToken,
+      mapboxgl: mapboxgl,
+    });
+
+    document.getElementById("geocoder").appendChild(geocoder.onAdd(map));
+  }
+
+  test();
+  document.querySelector("#slots").onchange = (e) => {
+    console.log(e.target.value)
+  }
+  document.querySelector("#testDate").onchange = (e) => {
+    checkAvailability(e.target.value)
+    //console.log(e.target.value)
+  }
+  async function checkAvailability(value) {
+    let date = value;
+    let hallName = document.querySelector("#hallName").innerHTML;
+
+    let isAvailable = await axios.post("http://localhost:3000/spots", { date, hallName });
+    console.log("the backend response:", isAvailable.data);
+
+    let checkSlotNineToTen = document.querySelector("#NineToTen").value;
+    console.log("test check: ", checkSlotNineToTen);
+
+    if (isAvailable.data == checkSlotNineToTen) {
+      console.log("big success!");
+      document.querySelector("#NineToTen").disabled = true;
+    }
+
+  }
 </script>
 
 
