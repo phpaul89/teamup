@@ -7,6 +7,43 @@ body {
 a {
   color: #00b7ff; }
 
+
+.nav-bar {
+  background-color: #43a3e7;
+  padding: 1vh 0 1vh 0; }
+
+.nav-bar a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.5em; }
+
+.nav-bar ul {
+  width: 85vw;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between; }
+
+.nav-bar li {
+  list-style: none;
+  text-align: center; }
+
+.map {
+  width: 80vw;
+  margin: 0 auto;
+  text-align: center;
+  background-color: #f1f3f1;
+  padding: 20vh 0 20vh 0; }
+
+.link-btn {
+  background-color: #43a3e6;
+  border-radius: 25px;
+  color: white;
+  font-size: 1.5em;
+  letter-spacing: 0.5px;
+  text-align: center;
+  text-decoration: none;
+  padding: 10px 30px 10px 30px; }
+
 #detail-panel {
   display: flex;
   flex-direction: column; }
@@ -63,6 +100,7 @@ a {
   left: 15%;
   margin-left: 0;
   margin-bottom: 2%; }
+
 
 .marker {
   background-image: url("../images/mapbox_marker_icon_2.png");
