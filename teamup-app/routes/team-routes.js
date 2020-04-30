@@ -8,16 +8,27 @@ const passport = require("passport");
 const ensureLogin = require("connect-ensure-login");
 const session = require("express-session");
 const Team = require("../models/Team-model.js");
+const User = require("../models/User-model.js");
 
 // get URL /signup -> do stuff
 
-router.get("/team-signup", (request, response) => {
-  response.render("team/team-signup.hbs");
-});
+router.get(
+  "/team-signup",
+  ensureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    const userObjectId = await User.findOne({
+      _id: request.user._id,
+    }).populate("myFriends");
 
-router.post("/team-signup", (request, response, next) => {
+    response.render("team/team-signup.hbs", { user: userObjectId.myFriends });
+  }
+);
+
+router.post("/team-signup", async (request, response, next) => {
   // get username, password, email, then create user
-  const { teamName } = request.body;
+  const { teamName, teamMembers } = request.body;
+
+  console.log(teamName, teamMembers);
 
   Team.findOne({ teamName }).then((exists) => {
     if (exists !== null) {
@@ -29,7 +40,27 @@ router.post("/team-signup", (request, response, next) => {
       })
         .then((team) => {
           console.log(team);
-          response.redirect("/private");
+          User.updateOne(
+            { _id: request.user._id },
+            { $push: { myTeams: team } }
+          )
+            .then((added) => {
+              console.log(teamMembers);
+              teamMembers.forEach(async (friend) => {
+                console.log(friend);
+                let friendObjectId = await User.findOne({ username: friend });
+                console.log(friendObjectId);
+                await Team.updateOne(
+                  { _id: team },
+                  { $push: { teamMembers: friendObjectId } }
+                );
+              });
+              response.redirect("/private");
+            })
+            .catch((error) => {
+              console.log(error);
+              next();
+            });
         })
         .catch((error) => {
           console.log(error);

@@ -1,5 +1,11 @@
 {{#each allUsers}}
-<p>{{username}}</p>
+
+
+<form action="/addfriends" method="POST">
+  <label for="friend">{{username}}</label>
+  <button type="submit" name="friend" value="{{username}}">+</button>
+</form>
+
 {{/each}}
 
 <a href="/private">Go back</a>
