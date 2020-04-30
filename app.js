@@ -179,18 +179,18 @@ app.use(favicon(path.join(__dirname, "public", "images", "favicon.ico")));
 app.locals.title = "Express - Generated with IronGenerator";
 
 const index = require("./routes/index.js");
-app.use("/", index);
+app.use("./", index);
 
 const auth = require("./routes/auth-routes.js");
-app.use("/", auth);
+app.use("./", auth);
 
 const member = require("./routes/member-routes.js");
-app.use("/", member);
+app.use("./", member);
 
 const team = require("./routes/team-routes.js");
-app.use("/", team);
+app.use("./", team);
 
 const dom = require("./routes/dom-routes.js");
-app.use("/", dom);
+app.use("./", dom);
 
 module.exports = app;
