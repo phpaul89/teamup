@@ -13,41 +13,109 @@
     <a href="/join-team/{{_id}}">Join this team</a>
     {{/each}}
   </div>
-  <br><br><br>
-  <div id="list-hall">
-    {{#each someHalls}}
-    <a href="/hall-detail/{{_id}}" id="hallName">{{name}}</a>
-    <p>{{address}}</p>
 
-    {{#if message}}
-    <div id="error-message">
-      {{message}}
+  <div class="center">
+
+    <div class="left-area">
+
+      <h1>Welcome {{user.username}}!</h1>
+
+      <div class="friends">
+        <h1>Your friends</h1>
+        {{#each friends}}
+        <p>{{friends.username}}</p>
+        {{!-- <form action="/addfriends" method="POST">
+        <label for="friend">Potential team member:</label>
+        <input type="text" name="friend" value="{{friends.username}}">
+        <button type="submit">Add as friend</button>
+        </form> --}}
+        {{/each}}
+        <br>
+        <a href="private/allmembers">Find friends</a>
+        {{!-- {{#if allUsers}}
+        {{#each allUsers}}
+        <p>{{username}}</p>
+        {{/each}}
+        <a href="#">Find friends</a>
+        {{else}}
+        <br>
+        <p>You have no friends yet</p>
+        <a href="#">Find friends</a>
+        {{/if}} --}}
+      </div>
+
+      <div class="teams">
+        <h1>Your teams</h1>
+
+        {{!-- {{#each allTeams}}
+        <p>{{teamName}}</p>
+        <a href="/join-team/{{_id}}">Join this team</a>
+        {{/each}} --}}
+
+        <br>
+        <a href="/team-signup">Create a team</a>
+        <br>
+        <a href="/private/allteams">Find teams</a>
+      </div>
+
     </div>
-    {{/if}}
-    {{/each}}
+
+    <div class="right-area">
+
+      <div class="text">
+        <p>Find a sports hall</p>
+        <p>Add your ZIP</p>
+        <p>Select equipments</p>
+      </div>
+
+      <div class="mapmap">
+        <div id="map-panel">
+          <div id="geocoder" class="geocoder"></div>
+          <div id='map' style='width: 600px; height: 400px;'></div>
+        </div>
+      </div>
+
+      <div class="schedule">
+        <div id="schedule-panel">
+          <br><br>
+          <form id="schedule-form" action="/#" method="POST">
+            <label for="testDate">Choose date:</label>
+            <input type="date" id="testDate" name="testDate"><br><br>
+            <label for="schedule-form">Choose time:</label>
+            <select id="slots" name="slots">
+              <option id="8-9" name="8-9">8 - 9</option>
+              <option id="NineToTen" name="9-10">9 - 10</option>
+              <option id="10-11" name="10-11">10 - 11</option>
+              <option id="11-12" name="11-12">11 - 12</option>
+              <option id="12-13" name="12-13">12 - 13</option>
+            </select>
+            <br><br>
+          </form>
+        </div>
+      </div>
+
+    </div>
+
   </div>
-  <br><br>
-  <div id="map-panel">
-    <div id="geocoder" class="geocoder"></div>
-    <div id='map' style='width: 600px; height: 400px;'></div>
-  </div>
-  <div id="schedule-panel">
-    <br><br>
-    <form id="schedule-form" action="/#" method="POST">
-      <label for="testDate">Choose date:</label>
-      <input type="date" id="testDate" name="testDate"><br><br>
-      <label for="schedule-form">Choose time:</label>
-      <select id="slots" name="slots">
-        <option id="8-9" name="8-9">8 - 9</option>
-        <option id="NineToTen" name="9-10">9 - 10</option>
-        <option id="10-11" name="10-11">10 - 11</option>
-        <option id="11-12" name="11-12">11 - 12</option>
-        <option id="12-13" name="12-13">12 - 13</option>
-      </select>
-      <br><br>
-    </form>
-  </div>
+
 </div>
+
+
+<a href="/get-marker">GET MARKER TEST</a>
+
+<div id="list-hall">
+  {{#each someHalls}}
+  <a href="/hall-detail/{{_id}}" id="hallName">{{name}}</a>
+  <p>{{address}}</p>
+
+  {{#if message}}
+  <div id="error-message">
+    {{message}}
+  </div>
+  {{/if}}
+  {{/each}}
+</div>
+
 <script>
   async function test() {
 
@@ -114,7 +182,6 @@
 
   }
 </script>
-
 
 <!-- categories of sport arts to be added later 
 [13.3475059, 52.4902439]-->
