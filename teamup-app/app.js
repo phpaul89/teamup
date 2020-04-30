@@ -20,7 +20,7 @@ const FacebookStrategy = require("passport-facebook").Strategy;
 const User = require("./models/User-model.js");
 
 mongoose
-  .connect("mongodb://localhost/teamup-app", {
+  .connect(process.env.MONGODB_URI || "mongodb://localhost/teamup-app", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
