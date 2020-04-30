@@ -1,55 +1,79 @@
-<nav class="nav-bar">
-  <ul>
-    <li><a href="/">TeamUp</a></li>
-    <li><a href="/signup">Sign up</a></li>
-    <li><a href="/login">Log in</a></li>
-  </ul>
-</nav>
+<div id="full">
+  <div id="navigation">
+    <nav class="nav-bar">
+      <ul>
+        <li><a href="/">TeamUp</a></li>
+        <li><a href="/login">Login</a></li>
+      </ul>
+    </nav>
+  </div>
+  <section id="introduction">
+    <h1>Do you want to play an indoor team sport in Berlin?</h1>
+    <div id="zip-input">
+      <h2>Find a hall near you:</h2>
+      <div id="geocoder" class="geocoder"></div>
+    </div>
 
-<section>
-  <h1>Do you want to play an indoor team sport in Berlin?</h1>
-  <h3>In this city, you have plenty of opportunities</h3>
-  <p>Here is a map of the available sports halls:</p>
-  <div class="map">map</div>
-</section>
-
-<section>
-  <h2>However, if you would like to play any kind of team sport, first you need a team.</h2>
-  <h3>With the help of TeamUp you can:</h3>
-  <ol>
-    <li>Find the people who would like to play the same sport as you</li>
-    <li>Create or join a team</li>
-    <li>Find a sports hall in your neighborhood with the desired equipment (e.g. football/handball goals, basketball
-      basket, volleyball net...)</li>
-    <li>Book the sports hall closest to you and play with your team</li>
-  </ol>
-</section>
-
-<section>
-  <h3>All you need to do is to sign up or log in, TeamUp helps you to
-    organize the rest.</h3>
-  <a href="/signup" class="link-btn">Sign up</a>
-  <a href="/login" class="link-btn">Log in</a>
-</section>
-
-<br>
-
-{{!-- GOOGLE LOGIN --}}
-{{#unless user}}
-<div>
-  <a href="/auth/google">Login With Google</a>
+  </section>
+  <div id="map-container">
+    <div id="map"></div>
+  </div>
+  <section id="hook">
+    <h2>However, if you would like to play any kind of team sport, first you need a team.</h2>
+  </section>
+  <section id="advantages">
+    <h2>With the help of TeamUp you can:</h2>
+    <div id="keypoints">
+      <div id="find-people">
+        <p>LOGO</p>
+        <p>Find sport fans</p>
+      </div>
+      <div id="build-team">
+        <p>LOGO</p>
+        <p>Build a team</p>
+      </div>
+      <div id="book-hall">
+        <p>LOGO</p>
+        <p>Book your hall</p>
+      </div>
+      <div id="have-fun">
+        <p>LOGO</p>
+        <p>Have fun!</p>
+      </div>
+    </div>
+  </section>
+  <div id="entry">
+    <div id="join">
+      <a href="/signup" class="link-btn">Sign up</a>
+      <a href="/login" class="link-btn">Login</a>
+    </div>
+    <div id="social-login">
+      {{#unless user}}<a href="/auth/google">Google Login
+      </a>{{/unless}}
+      {{#unless user}}<a href="/auth/facebook">Facebook Login</a>{{/unless}}
+    </div>
+  </div>
+  <a href="/logout">Log out</a> <!-- for testing purposes here -->
 </div>
-{{/unless}}
+<br><br>
+<script>
+  // MapBox start
+  // basic MapBox for now
+  // adapt newer code for iterating through database later
+  mapboxgl.accessToken = "pk.eyJ1IjoicGhwYXVsODkiLCJhIjoiY2s5anB3dnAxMDBjdzNlcDk3ZXNjb2VqNiJ9.3F5ihEH6D8CIfUm_WN1yvw";
+  let map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v9',
+    center: [13.4094191, 52.520815],
+    zoom: 11
+  });
+  // MapBox end
+  // add a GeoCoder
+  let geocoder = new MapboxGeocoder({
+    accessToken: mapboxgl.accessToken,
+    mapboxgl: mapboxgl
+  });
 
-<br>
+  document.getElementById("geocoder").appendChild(geocoder.onAdd(map));
 
-{{!-- FACEBOOK LOGIN --}}
-{{#unless user}}
-<div>
-  <a href="/auth/facebook">Login With Facebook</a>
-</div>
-{{/unless}}
-
-<br>
-
-<a href="/logout">Log out</a> <!-- for testing purposes here -->
+</script>

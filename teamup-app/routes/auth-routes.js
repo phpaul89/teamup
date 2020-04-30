@@ -1,4 +1,4 @@
-// jshint esversion:6
+//
 
 const express = require("express");
 const router = express.Router();
@@ -9,8 +9,7 @@ const ensureLogin = require("connect-ensure-login");
 const session = require("express-session");
 const User = require("../models/User-model.js");
 
-// get URL /signup -> do stuff
-
+//
 router.get("/signup", (request, response) => {
   response.render("auth/signup.hbs");
 });
@@ -19,10 +18,13 @@ router.post("/signup", (request, response, next) => {
   // get username, password, email, then create user
   const { username, password, email } = request.body;
 
-  User.findOne({ username }).then((exists) => {
+  // read: if 'username' or 'email' already exists, then error
+  User.findOne({ $or: [{ username }, { email }] }).then((exists) => {
     if (exists !== null) {
-      console.log("Username exists already");
-      response.render("auth/signup.hbs"); //, {message: "Username already exists"});
+      request.flash("error", "Cannot signup with this credentials.");
+      response.render("auth/signup.hbs", {
+        message: request.flash("error"),
+      });
     } else {
       const salt = bcrypt.genSaltSync(bcryptSalt);
       const hashPass = bcrypt.hashSync(password, salt);
@@ -77,16 +79,16 @@ router.get(
 );
 
 // LOGIN WITH FACEBOOK (without sign up)
-router.get("/auth/facebook", passport.authenticate("facebook"));
-router.get(
-  "/auth/facebook/callback",
-  passport.authenticate("facebook", {
-    successRedirect: "/private",
-    failureRedirect: "/", // here you would redirect to the login page using traditional login approach
-  })
-);
+// router.get("/auth/facebook", passport.authenticate("facebook"));
+// router.get(
+//   "/auth/facebook/callback",
+//   passport.authenticate("facebook", {
+//     successRedirect: "/private",
+//     failureRedirect: "/", // here you would redirect to the login page using traditional login approach
+//   })
+// );
 
-router.get("/logout", (request, response) => {
+router.get("/logout", ensureLogin.ensureLoggedIn(), (request, response) => {
   request.logout();
   response.redirect("/");
 });
