@@ -1,7 +1,17 @@
-<div class="main">
+<h1>Welcome {{user.username}}!</h1>
 
-  <div class="top">
-    navbar
+<div id="detail-panel">
+  <div id="list-user">
+    {{#each allUsers}}
+    <p>{{username}}</p>
+    {{/each}}
+  </div>
+  <br><br>
+  <div id="list-team">
+    {{#each allTeams}}
+    <p>{{teamName}}</p>
+    <a href="/join-team/{{_id}}">Join this team</a>
+    {{/each}}
   </div>
 
   <div class="center">
