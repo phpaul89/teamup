@@ -2,8 +2,17 @@
   <h1>Team signup</h1>
   <label for="teamName">Team name: </label>
   <input type="text" name="teamName" placeholder="Add team name" required><br><br>
+  <select id="teamMembers" name="teamMembers" multiple>
+    {{#each user}}
+    {{#each this}}
+    {{#if this.username}}<option value="{{this.username}}">{{this.username}}</option>{{/if}}
+    {{/each}}
+    {{/each}}
+  </select>
   <button type="submit">Register the team</button>
 </form>
+
+
 
 <br>
 

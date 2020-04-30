@@ -217,8 +217,8 @@ router.post(
     })
       .then((schedule) => {
         console.log(schedule);
-        User.updateOne(
-          { _id: request.user._id },
+        User.updateMany(
+          { myTeams: teamObjectId },
           { $push: { mySchedules: schedule } }
         ).then((x) => {
           response.redirect("/private");
