@@ -1,15 +1,29 @@
-<form id="form" action="/login" method="POST">
-  <h1>Login page</h1>
-  <label for="username">Username: </label>
-  <input type="text" name="username" placeholder="Enter username" required><br><br>
-  <label for="password">Password: </label>
-  <input type="password" name="password" placeholder="Enter password" required><br><br>
-  <button type="submit">Login</button>
-  {{#if message}}
-  <div id="error-message">
-    {{message}}
+<div id="full" class="bg-white">
+  <div id="navigation">
+    <nav class="nav-bar">
+      <ul>
+        <li><a href="/">TeamUp</a></li>
+        <li><a href="/login">Login</a></li>
+      </ul>
+    </nav>
   </div>
-  {{/if}}
-</form>
+  <div id="auth-wrapper">
+    <div id="authentication">
+      <form id="form" action="/login" method="POST">
+        <h1>Login</h1><br><br>
+        <label for="username">Username: </label>
+        <input type="text" name="username" placeholder="Enter username" required><br>
+        <label for="password">Password: </label>
+        <input type="password" name="password" placeholder="Enter password" required><br>
+        <button type="submit">Login</button>
+        {{#if message}}
+        <div id="error-message">
+          {{message}}
+        </div>
+        {{/if}}
+      </form><br><br><br>
+    </div>
+  </div>
+</div>
 
 <!-- 'required' attribute = HTML 5 feature, user has to fill something in or cannot process further -->

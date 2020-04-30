@@ -1,9 +1,14 @@
 body {
-  padding: 1vh 5vw 1vh 5vw;
+  //padding: 1vh 5vw 1vh 5vw;
+  padding: 0;
   margin: 0;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   height: 100%;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 }
 
 footer {
@@ -29,7 +34,7 @@ footer p {
 // start preview page:
 #full {
   height: 100%;
-  width: 100%;
+  width: 80%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -52,6 +57,7 @@ footer p {
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .nav-bar li {
@@ -64,12 +70,19 @@ footer p {
   font-size: 1.5em;
 }
 
+.nav-bar ul li p {
+  padding: 0;
+  margin: 0;
+  color: #fff;
+  font-size: 1.5em;
+}
+
 #introduction {
-  padding: 3%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin: 3%;
 }
 
 #zip-input {
@@ -90,8 +103,8 @@ footer p {
 }
 
 #map-container {
-  height: 34vh;
-  width: 60vw;
+  height: 60vh;
+  width: 60%;
 }
 
 #map {
@@ -110,14 +123,21 @@ footer p {
   width: 45%;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 #keypoints {
   padding: 10% 3% 5% 3%;
+  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   text-align: center;
+}
+
+#keypoints p {
+  margin-top: 20%;
+  //font-weight: bold;
 }
 
 #entry {
@@ -129,11 +149,42 @@ footer p {
   align-items: center;
 }
 
+#find-people,
+#build-team,
+#book-hall,
+#have-fun {
+  width: 25%;
+}
+
+#find-people img,
+#build-team img,
+#book-hall img,
+#have-fun img {
+  height: 50%;
+  width: 60%;
+}
+
+#join a {
+  text-decoration: none;
+}
+
 #social-login {
-  width: 26%;
-  display: flex;
-  flex-direction: column;
+  width: 16%;
   padding-left: 2%;
+}
+
+#social-login a {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-decoration: none;
+}
+
+#social-login img {
+  height: 25%;
+  width: 25%;
+  margin-left: 5%;
+  margin-right: 10%;
 }
 
 .link-btn {
@@ -148,36 +199,24 @@ footer p {
   margin: 0.5rem;
 }
 
-.fb-btn {
-  background-color: #4267b2;
-  border-radius: 25px;
-  color: white;
-  font-size: 1.5em;
-  letter-spacing: 0.5px;
-  text-align: center;
-  text-decoration: none;
-  padding: 10px 30px 10px 30px;
-  margin: 0.5rem;
-}
-
-.google-btn {
-  background-color: #ea4335;
-  border-radius: 25px;
-  color: white;
-  font-size: 1.5em;
-  letter-spacing: 0.5px;
-  text-align: center;
-  text-decoration: none;
-  padding: 10px 30px 10px 30px;
-  margin: 0.5rem;
-}
-
 // end preview page
 
-#detail-panel {
+// start login, signup page:
+#auth-wrapper {
+  height: 100%;
+  width: 100%;
+}
+
+#form {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
+
+#form h1 {
+  margin-bottom: 2%;
+}
+// end login, signup page
 
 // main layout
 #main {
@@ -208,47 +247,36 @@ footer p {
   height: 10%;
 }
 
+// above = ???
+
 #center {
   background-color: yellow;
-  height: 90%;
-  width: 90%;
+  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-evenly;
-}
-
-.center {
-  height: 90%;
-  width: 90%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-around;
 }
 
 #left-area {
   background-color: violet;
   height: 90%;
   width: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.left-area {
-  height: 90%;
-  width: 35%;
+#friends,
+#teams,
+#schedules {
+  width: 90%;
+  padding-top: 8%;
 }
 
 #right-area {
   background-color: green;
-  height: 90%;
-  width: 60%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-}
-
-.right-area {
   height: 90%;
   width: 60%;
   display: flex;
@@ -269,11 +297,6 @@ footer p {
 
 #text {
   background-color: rgb(247, 221, 74);
-  height: 30%;
-  width: 80%;
-}
-
-.text {
   height: 30%;
   width: 80%;
 }

@@ -19,8 +19,10 @@ const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const FacebookStrategy = require("passport-facebook").Strategy;
 const User = require("./models/User-model.js");
 
+// uncomment for deployment on HEROKU:
+
 mongoose
-  .connect(process.env.MONGODB_URI || "mongodb://localhost/teamup-app", {
+  .connect(/*process.env.MONGODB_URI ||*/ "mongodb://localhost/teamup-app", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })

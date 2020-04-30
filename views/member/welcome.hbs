@@ -1,10 +1,19 @@
-<div id="detail-panel">
-  <div class="center">
-    <div class="left-area">
-      <h1>Welcome {{user.username}}!</h1>
-      <div class="friends">
-        <h1>Your friends</h1>
-
+<div id="full" class="bg-white">
+  <div id="navigation">
+    <nav class="nav-bar">
+      <ul>
+        <li><a href="/">TeamUp</a></li>
+        <li>
+          <p>Hey, {{user.username}}</p>
+        </li>
+        <li><a href="/logout">Logout</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div id="center">
+    <div id="left-area">
+      <div id="friends">
+        <h3>Your friends</h3>
         {{#each friends}}
         {{#each this}}
         {{#if this.username}}<div class="user-friends">{{this.username}}</div>{{/if}}
@@ -13,8 +22,9 @@
         <br>
         <a href="private/allmembers">Find friends</a>
       </div>
-      <div class="teams">
-        <h1>Your teams</h1>
+
+      <div id="teams">
+        <h3>Your teams</h3>
         {{#each allTeams}}
         {{#each this}}
         {{#if this.teamName}}<div class="user-teams">{{this.teamName}}</div>{{/if}}
@@ -25,89 +35,71 @@
         <br>
         <a href="/private/allteams">Find teams</a>
       </div>
+
       <div id="schedules">
-        <h1>Your games</h1>
+        <h3>Your games</h3>
         {{#each allSchedules}}
-        <div class="user-schedules"></div>
         {{#each mySchedules}}
         {{#each this}}
         {{#if this.date}}
-        <p>{{this.date}}</p>
-        <p>{{this.timeSlot}}</p>
-        <p>{{this.hall.name}}</p>
-        <p>{{this.hall.street}}</p>
-        <p>{{this.team.teamName}}</p>
+        <div class="user-date">{{this.date}}</div>
+        <div class="user-slot">{{this.timeSlot}}</div>
+        <div class="user-hall-name">{{this.hall.name}}</div>
+        <div class="user-hall-street">{{this.hall.street}}</div>
+        <div class="user-team-name">{{this.team.teamName}}</div>
         {{/if}}
         {{/each}}
         {{/each}}
+        {{/each}}
       </div>
-      {{/each}}
+
+    </div>
+    <div id="right-area">
+      <div id="text">
+        <p>Find a sports hall</p>
+        <p>Add your ZIP</p>
+        <p>Select equipments</p>
+      </div>
+      <div id="mapmap">
+        <div id="map-panel">
+          <div id="geocoder" class="geocoder"></div>
+          <div id='map' style='width: 600px; height: 400px;'></div>
+        </div>
+      </div>
+      <div id="schedule">
+        <div id="schedule-panel">
+          <br><br>
+          <form id="schedule-form" action="/addschedule" method="POST">
+            <label for="hall-name">Selected hall:</label>
+            <input id="hall-name-selected" name="hallNameSelected" required></input>
+            <label for="testDate">Choose date:</label>
+            <input type="date" id="testDate" name="testDate" required><br><br>
+            <label for="schedule-form">Choose time:</label>
+            <select id="slots" name="slots">
+              <option id="8-9" name="8-9">8 - 9</option>
+              <option id="NineToTen" name="9-10">9 - 10</option>
+              <option id="10-11" name="10-11">10 - 11</option>
+              <option id="11-12" name="11-12">11 - 12</option>
+              <option id="12-13" name="12-13">12 - 13</option>
+            </select>
+            <label for="team-selector-choose-label">Choose team:</label>
+            <select id="team-selector-dropdown" name="teamSelectorDropDown">
+              {{#each allTeams}}
+              {{#each this}}
+              {{#if this.teamName}}<option id="{{this.teamName}}" name="{{this.teamName}}">{{this.teamName}}</option>
+              {{/if}}
+              {{/each}}
+              {{/each}}
+            </select>
+            <button type="submit">Book Hall</button>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="right-area">
-    <div class="text">
-      <p>Find a sports hall</p>
-      <p>Add your ZIP</p>
-      <p>Select equipments</p>
-    </div>
-    <div class="mapmap">
-      <div id="map-panel">
-        <div id="geocoder" class="geocoder"></div>
-        <div id='map' style='width: 600px; height: 400px;'></div>
-      </div>
-    </div>
-    <div class="schedule">
-      <div id="schedule-panel">
-        <br><br>
-        <form id="schedule-form" action="/addschedule" method="POST">
-          <label for="hall-name">Selected hall:</label>
-          <input id="hall-name-selected" name="hallNameSelected" required></input>
-          <label for="testDate">Choose date:</label>
-          <input type="date" id="testDate" name="testDate" required><br><br>
-          <label for="schedule-form">Choose time:</label>
-          <select id="slots" name="slots">
-            <option id="8-9" name="8-9">8 - 9</option>
-            <option id="NineToTen" name="9-10">9 - 10</option>
-            <option id="10-11" name="10-11">10 - 11</option>
-            <option id="11-12" name="11-12">11 - 12</option>
-            <option id="12-13" name="12-13">12 - 13</option>
-          </select>
-          <label for="team-selector-choose-label">Choose team:</label>
-          <select id="team-selector-dropdown" name="teamSelectorDropDown">
-            {{#each allTeams}}
-            {{#each this}}
-            {{#if this.teamName}}<option id="{{this.teamName}}" name="{{this.teamName}}">{{this.teamName}}</option>
-            {{/if}}
-            {{/each}}
-            {{/each}}
-          </select>
-          <button type="submit">Book Hall</button>
-        </form>
-      </div>
-    </div>
-
-
-  </div>
 </div>
-</div>
-<!--
-<a href="/get-marker">GET MARKER TEST</a>
-<div id="list-hall">
-  {{#each someHalls}}
-  <a href="/hall-detail/{{_id}}" id="hallName">{{name}}</a>
-  <p>{{address}}</p>
-  {{#if message}}
-  <div id="error-message">
-    {{message}}
-  </div>
-  {{/if}}
-  {{/each}}
-</div>
--->
-
 <script>
   async function test() {
-
     mapboxgl.accessToken =
       "pk.eyJ1IjoicGhwYXVsODkiLCJhIjoiY2s5anB3dnAxMDBjdzNlcDk3ZXNjb2VqNiJ9.3F5ihEH6D8CIfUm_WN1yvw";
     /* Map: This represents the map on the page. */
@@ -168,11 +160,5 @@
       console.log("big success!");
       document.querySelector("#NineToTen").disabled = true;
     }
-
   }
 </script>
-
-<!-- categories of sport arts to be added later 
-[13.3475059, 52.4902439]-->
-<br>
-<a href="/logout">Log out</a>
