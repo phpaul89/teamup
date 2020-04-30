@@ -1,6 +1,8 @@
 {{#each allTeams}}
-<p>{{teamName}}</p>
-<a href="/join-team/{{_id}}">Join this team</a>
+<form action="/join-team" method="POST">
+  <label for="team">{{teamName}}</label>
+  <button type="submit" name="team" value="{{teamName}}">+</button>
+</form>
 {{/each}}
 
 <br><br>

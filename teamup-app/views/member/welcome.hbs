@@ -1,113 +1,101 @@
-<h1>Welcome {{user.username}}!</h1>
-
 <div id="detail-panel">
-  <div id="list-user">
-    {{#each allUsers}}
-    <p>{{username}}</p>
-    {{/each}}
-  </div>
-  <br><br>
-  <div id="list-team">
-    {{#each allTeams}}
-    <p>{{teamName}}</p>
-    <a href="/join-team/{{_id}}">Join this team</a>
-    {{/each}}
-  </div>
-
   <div class="center">
-
     <div class="left-area">
-
       <h1>Welcome {{user.username}}!</h1>
-
       <div class="friends">
         <h1>Your friends</h1>
+
         {{#each friends}}
-        <p>{{friends.username}}</p>
-        {{!-- <form action="/addfriends" method="POST">
-        <label for="friend">Potential team member:</label>
-        <input type="text" name="friend" value="{{friends.username}}">
-        <button type="submit">Add as friend</button>
-        </form> --}}
+        {{#each this}}
+        {{#if this.username}}<div class="user-friends">{{this.username}}</div>{{/if}}
+        {{/each}}
         {{/each}}
         <br>
         <a href="private/allmembers">Find friends</a>
-        {{!-- {{#if allUsers}}
-        {{#each allUsers}}
-        <p>{{username}}</p>
-        {{/each}}
-        <a href="#">Find friends</a>
-        {{else}}
-        <br>
-        <p>You have no friends yet</p>
-        <a href="#">Find friends</a>
-        {{/if}} --}}
       </div>
-
       <div class="teams">
         <h1>Your teams</h1>
-
-        {{!-- {{#each allTeams}}
-        <p>{{teamName}}</p>
-        <a href="/join-team/{{_id}}">Join this team</a>
-        {{/each}} --}}
-
+        {{#each allTeams}}
+        {{#each this}}
+        {{#if this.teamName}}<div class="user-teams">{{this.teamName}}</div>{{/if}}
+        {{/each}}
+        {{/each}}
         <br>
         <a href="/team-signup">Create a team</a>
         <br>
         <a href="/private/allteams">Find teams</a>
       </div>
-
+      <div id="schedules">
+        <h1>Your games</h1>
+        {{#each allSchedules}}
+        <div class="user-schedules"></div>
+        {{#each mySchedules}}
+        {{#each this}}
+        {{#if this.date}}
+        <p>{{this.date}}</p>
+        <p>{{this.timeSlot}}</p>
+        <p>{{this.hall.name}}</p>
+        <p>{{this.hall.street}}</p>
+        <p>{{this.team.teamName}}</p>
+        {{/if}}
+        {{/each}}
+        {{/each}}
+      </div>
+      {{/each}}
+    </div>
+  </div>
+  <div class="right-area">
+    <div class="text">
+      <p>Find a sports hall</p>
+      <p>Add your ZIP</p>
+      <p>Select equipments</p>
+    </div>
+    <div class="mapmap">
+      <div id="map-panel">
+        <div id="geocoder" class="geocoder"></div>
+        <div id='map' style='width: 600px; height: 400px;'></div>
+      </div>
+    </div>
+    <div class="schedule">
+      <div id="schedule-panel">
+        <br><br>
+        <form id="schedule-form" action="/addschedule" method="POST">
+          <label for="hall-name">Selected hall:</label>
+          <input id="hall-name-selected" name="hallNameSelected" required></input>
+          <label for="testDate">Choose date:</label>
+          <input type="date" id="testDate" name="testDate" required><br><br>
+          <label for="schedule-form">Choose time:</label>
+          <select id="slots" name="slots">
+            <option id="8-9" name="8-9">8 - 9</option>
+            <option id="NineToTen" name="9-10">9 - 10</option>
+            <option id="10-11" name="10-11">10 - 11</option>
+            <option id="11-12" name="11-12">11 - 12</option>
+            <option id="12-13" name="12-13">12 - 13</option>
+          </select>
+          <label for="team-selector-choose-label">Choose team:</label>
+          <select id="team-selector-dropdown" name="teamSelectorDropDown">
+            {{#each allTeams}}
+            {{#each this}}
+            {{#if this.teamName}}<option id="{{this.teamName}}" name="{{this.teamName}}">{{this.teamName}}</option>
+            {{/if}}
+            {{/each}}
+            {{/each}}
+          </select>
+          <button type="submit">Book Hall</button>
+        </form>
+      </div>
     </div>
 
-    <div class="right-area">
-
-      <div class="text">
-        <p>Find a sports hall</p>
-        <p>Add your ZIP</p>
-        <p>Select equipments</p>
-      </div>
-
-      <div class="mapmap">
-        <div id="map-panel">
-          <div id="geocoder" class="geocoder"></div>
-          <div id='map' style='width: 600px; height: 400px;'></div>
-        </div>
-      </div>
-
-      <div class="schedule">
-        <div id="schedule-panel">
-          <br><br>
-          <form id="schedule-form" action="/#" method="POST">
-            <label for="testDate">Choose date:</label>
-            <input type="date" id="testDate" name="testDate"><br><br>
-            <label for="schedule-form">Choose time:</label>
-            <select id="slots" name="slots">
-              <option id="8-9" name="8-9">8 - 9</option>
-              <option id="NineToTen" name="9-10">9 - 10</option>
-              <option id="10-11" name="10-11">10 - 11</option>
-              <option id="11-12" name="11-12">11 - 12</option>
-              <option id="12-13" name="12-13">12 - 13</option>
-            </select>
-            <br><br>
-          </form>
-        </div>
-      </div>
-
-    </div>
 
   </div>
-
 </div>
-
-
+</div>
+<!--
 <a href="/get-marker">GET MARKER TEST</a>
-
 <div id="list-hall">
   {{#each someHalls}}
   <a href="/hall-detail/{{_id}}" id="hallName">{{name}}</a>
   <p>{{address}}</p>
-
   {{#if message}}
   <div id="error-message">
     {{message}}
@@ -115,6 +103,7 @@
   {{/if}}
   {{/each}}
 </div>
+-->
 
 <script>
   async function test() {
@@ -137,12 +126,17 @@
       var el = document.createElement("div");
       el.className = "marker";
 
+      el.onclick = () => {
+        console.log(hall.name);
+        document.querySelector("#hall-name-selected").value = hall.name;
+      };
+
       // make a marker for each feature and add to the map
       new mapboxgl.Marker(el)
         .setLngLat(hall.coordinates)
         .setPopup(
           new mapboxgl.Popup({ offset: 25 }) // add popups
-            .setHTML(`Name: ${hall.name}`)
+            .setHTML(`Name: ${hall.name}<br>>`)
         )
         .addTo(map);
     });
@@ -157,17 +151,12 @@
 
   test();
 
-  /*document.querySelector("#slots").onchange = (e) => {
-    console.log(e.target.value)
-  }*/
-
   document.querySelector("#testDate").onchange = (e) => {
     checkAvailability(e.target.value)
-    //console.log(e.target.value)
   }
   async function checkAvailability(value) {
     let date = value;
-    let hallName = document.querySelector("#hallName").innerHTML;
+    let hallName = document.querySelector("#hall-name-selected").value;
 
     let isAvailable = await axios.post("http://localhost:3000/spots", { date, hallName });
     console.log("the backend response:", isAvailable.data);

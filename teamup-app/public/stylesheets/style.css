@@ -5,6 +5,24 @@ body {
   height: 100%;
   width: 100%; }
 
+footer {
+  border-top: 1px solid #000;
+  height: 3em;
+  width: 100%;
+  color: #fff;
+  background-color: #43a3e7;
+  margin-top: 4%;
+  display: flex; }
+
+footer p {
+  height: 100%;
+  margin: 0;
+  padding: 0 0 0 2%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center; }
+
 #full {
   height: 100%;
   width: 100%;
@@ -12,7 +30,6 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center; }
-
 
 #navigation {
   height: 10%;
@@ -213,6 +230,18 @@ body {
 
 #text {
   background-color: #f7dd4a;
+  height: 30%;
+  width: 80%; }
+
+.text {
+  height: 30%;
+  width: 80%; }
+
+.map-a {
+  height: 40%;
+  width: 80%; }
+
+.schedule {
   height: 30%;
   width: 80%; }
 

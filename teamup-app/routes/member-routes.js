@@ -18,19 +18,55 @@ router.get(
   "/private", // welcome.hbs
   ensureLogin.ensureLoggedIn(),
   async (request, response) => {
-    const allUsers = await User.find({}); // add the property friends
-    const allTeams = await Team.find({});
-    const someHalls = await Hall.find();
-    const friends = await User.find({ _id: request.user._id }).populate(
-      "friends"
+    const allUsersPromise = User.find({});
+    const allTeamsPromise = User.findOne({ _id: request.user._id }).populate(
+      "myTeams"
     );
-    console.log(request.user.friends);
+    const someHallsPromise = Hall.find();
+    const friendsPromise = User.findOne({ _id: request.user._id }).populate(
+      "myFriends"
+    );
+
+    //const schedulesPromise = User.findOne({ _id: request.user._id }).populate("mySchedules");
+
+    const schedulesPromise = User.findOne({ _id: request.user._id })
+      .populate({
+        path: "mySchedules",
+        populate: {
+          path: "hall",
+          model: "Hall",
+        },
+      })
+      .populate({
+        path: "mySchedules",
+        populate: {
+          path: "team",
+          model: "Team",
+        },
+      });
+
+    // parallel 'await'ing instead of sequential
+    const [
+      allUsers,
+      allTeams,
+      someHalls,
+      allFriends,
+      allSchedules,
+    ] = await Promise.all([
+      allUsersPromise,
+      allTeamsPromise,
+      someHallsPromise,
+      friendsPromise,
+      schedulesPromise,
+    ]);
+
     response.render("member/welcome.hbs", {
       user: request.user,
       allUsers: allUsers,
-      allTeams: allTeams,
+      allTeams: allTeams.myTeams,
       someHalls: someHalls,
-      friends: friends,
+      friends: allFriends.myFriends,
+      allSchedules: allSchedules,
     });
   }
 );
@@ -56,18 +92,20 @@ router.post(
   "/addfriends",
   ensureLogin.ensureLoggedIn(),
   async (request, response) => {
-    const friend = request.body.friend;
+    console.log("request form POST :", request.body.friend); //works
+    const friend = request.body.friend; // "Phil1" value
     const friendObjectId = await User.findOne({ username: friend });
-    console.log(friendObjectId);
-    console.log(friend);
+    console.log("new friend OID: ", friendObjectId); //works
+    console.log("new friend name: ", friend); //works
     const loggedInUser = request.user;
     console.log(loggedInUser);
     console.log(loggedInUser._id);
     User.updateOne(
       { _id: loggedInUser._id },
-      { $push: { friends: friendObjectId } }
+      { $push: { myFriends: friendObjectId } }
     ).then((user) => {
       console.log(user);
+      response.redirect("/private");
     });
   }
 );
@@ -77,8 +115,8 @@ router.get("/get-marker", async (request, response) => {
   const someHalls = await Hall.find().lean();
   let updatedHalls = [];
 
-  console.log("1");
-  console.log("Here: ", updatedHalls);
+  //console.log("1");
+  //console.log("Here: ", updatedHalls);
 
   let token =
     "pk.eyJ1IjoicGhwYXVsODkiLCJhIjoiY2s5anB3dnAxMDBjdzNlcDk3ZXNjb2VqNiJ9.3F5ihEH6D8CIfUm_WN1yvw";
@@ -87,7 +125,7 @@ router.get("/get-marker", async (request, response) => {
     return `https://api.mapbox.com/geocoding/v5/mapbox.places/${street}_${city}_${zip}.json?types=address&access_token=${token}`;
   };
 
-  console.log("2");
+  //console.log("2");
 
   async function getCoordinates(halls) {
     for (let hall of halls) {
@@ -102,32 +140,89 @@ router.get("/get-marker", async (request, response) => {
     return null;
   }
 
-  console.log("3");
+  //console.log("3");
 
   await getCoordinates(someHalls);
 
-  console.log("4");
+  //console.log("4");
   //console.log("Here again: ", updatedHalls);
-  console.log(updatedHalls);
+  //console.log(updatedHalls);
 
   response.send(updatedHalls);
 });
 
-router.get(
-  "/join-team/:id",
+router.post(
+  "/join-team",
   ensureLogin.ensureLoggedIn(),
-  (request, response, next) => {
+  async (request, response, next) => {
     // insert 'User' into 'Team' property 'teamMembers'
 
     // request.user -> logged in user
     // push this user into teamMembers
+    const teamObjectId = await Team.findOne({ teamName: request.body.team });
 
-    Team.update(
-      { _id: request.params.id },
-      { $push: { teamMembers: request.user.id } }
+    User.updateOne(
+      { _id: request.user._id },
+      { $push: { myTeams: teamObjectId } }
     )
       .then((x) => {
-        console.log(x);
+        Team.update(
+          { teamName: request.body.team },
+          { $push: { teamMembers: request.user._id } }
+        )
+          .then((x) => {
+            console.log(x);
+            response.redirect("/private");
+          })
+          .catch((error) => {
+            console.log(error);
+            next();
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+        next();
+      });
+  }
+);
+
+router.post(
+  "/addschedule",
+  ensureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    const {
+      testDate,
+      slots,
+      teamSelectorDropDown,
+      hallNameSelected,
+    } = request.body;
+    const teamObjectId = await Team.findOne({ teamName: teamSelectorDropDown });
+
+    console.log(
+      testDate,
+      slots,
+      teamSelectorDropDown,
+      teamObjectId,
+      hallNameSelected
+    );
+
+    // get the value of the checkbox in popup at marker, then:
+    const hallObjectId = await Hall.findOne({ name: hallNameSelected });
+
+    Schedule.create({
+      date: testDate,
+      timeSlot: slots,
+      hall: hallObjectId,
+      team: teamObjectId,
+    })
+      .then((schedule) => {
+        console.log(schedule);
+        User.updateOne(
+          { _id: request.user._id },
+          { $push: { mySchedules: schedule } }
+        ).then((x) => {
+          response.redirect("/private");
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -140,7 +235,7 @@ router.get(
   "/hall-detail/:id",
   ensureLogin.ensureLoggedIn(),
   async (request, response, next) => {
-    console.log(request.params.id);
+    //console.log(request.params.id);
     const theHall = await Hall.findById(request.params.id);
     const userTeams = await Team.find({ teamMembers: request.user._id });
 
@@ -193,18 +288,18 @@ router.post(
 
 router.post("/spots", async (request, response) => {
   const { date, hallName } = request.body;
-  console.log(date, hallName);
+  //console.log(date, hallName);
 
   const hallObjectId = await Hall.findOne({ name: hallName });
 
-  console.log(hallObjectId);
+  //console.log(hallObjectId);
 
   const timeSlotsFilled = await Schedule.findOne({
     date: date,
     hall: hallObjectId,
   });
 
-  console.log(timeSlotsFilled.timeSlot);
+  //console.log(timeSlotsFilled.timeSlot);
 
   response.send(timeSlotsFilled.timeSlot);
 });

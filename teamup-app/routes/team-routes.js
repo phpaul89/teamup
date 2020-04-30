@@ -8,6 +8,7 @@ const passport = require("passport");
 const ensureLogin = require("connect-ensure-login");
 const session = require("express-session");
 const Team = require("../models/Team-model.js");
+const User = require("../models/User-model.js");
 
 // get URL /signup -> do stuff
 
@@ -29,7 +30,17 @@ router.post("/team-signup", (request, response, next) => {
       })
         .then((team) => {
           console.log(team);
-          response.redirect("/private");
+          User.updateOne(
+            { _id: request.user._id },
+            { $push: { myTeams: team } }
+          )
+            .then((added) => {
+              response.redirect("/private");
+            })
+            .catch((error) => {
+              console.log(error);
+              next();
+            });
         })
         .catch((error) => {
           console.log(error);
