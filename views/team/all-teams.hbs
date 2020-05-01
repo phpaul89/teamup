@@ -1,9 +1,28 @@
-{{#each allTeams}}
-<form action="/join-team" method="POST">
-  <label for="team">{{teamName}}</label>
-  <button type="submit" name="team" value="{{teamName}}">+</button>
-</form>
-{{/each}}
+<div id="full" class="bg-white">
+  <div id="navigation">
+    <nav class="nav-bar">
+      <ul>
+        <li><a href="/">TeamUp</a></li>
+        <li>
+          <p>Hey, {{loggedInUser.username}}</p>
+        </li>
+        <li><a href="/logout">Logout</a></li>
+      </ul>
+    </nav>
+  </div>
 
+  <div id="joinATeam">
+    <h2>Which team do you want to join?</h2>
+    <br>
+    {{#each allTeams}}
+    <div class="teamToJoin"></div>
+    <form action="/join-team" method="POST">
+      <button type="submit" name="team" value="{{teamName}}">+</button>
+      <label for="team">{{teamName}}</label>
+    </form>
+
+    {{/each}}
+  </div>
+</div>
 <br><br>
 <a href="/private">Go back</a>

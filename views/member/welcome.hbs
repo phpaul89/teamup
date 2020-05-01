@@ -1,4 +1,4 @@
-<div id="full" class="bg-white">
+<div id="full" class="bg-light">
   <div id="navigation">
     <nav class="nav-bar">
       <ul>
@@ -10,62 +10,80 @@
       </ul>
     </nav>
   </div>
-  <div id="center">
+
+  <div id="center" class="bg-white">
     <div id="left-area">
       <div id="friends">
         <h3>Your friends</h3>
-        {{#each friends}}
-        {{#each this}}
-        {{#if this.username}}<div class="user-friends">{{this.username}}</div>{{/if}}
-        {{/each}}
-        {{/each}}
         <br>
-        <a href="private/allmembers">Find friends</a>
+        <div id="user-friends">
+          {{#each friends}}
+          {{#each this}}
+          {{#if this.username}}<div class="user-friends">{{this.username}}</div>{{/if}}
+          {{/each}}
+          {{/each}}
+        </div>
+        <br>
+        <div id="friend-link"><a href="private/allmembers">Find friends</a></div>
+        <div class="hr">
+          <hr>
+        </div>
       </div>
 
       <div id="teams">
         <h3>Your teams</h3>
-        {{#each allTeams}}
-        {{#each this}}
-        {{#if this.teamName}}<div class="user-teams">{{this.teamName}}</div>{{/if}}
-        {{/each}}
-        {{/each}}
         <br>
-        <a href="/team-signup">Create a team</a>
+        <div id="team-members">
+          {{#each allTeams}}
+          {{#each this}}
+          {{#if this.teamName}}<div class="user-teams">{{this.teamName}}</div>{{/if}}
+          {{/each}}
+          {{/each}}
+        </div>
         <br>
-        <a href="/private/allteams">Find teams</a>
+        <div id="team-links">
+          <a href="/team-signup">Create a team</a>
+          <a href="/private/allteams">Find teams</a>
+        </div>
+        <div class="hr">
+          <hr>
+        </div>
       </div>
 
       <div id="schedules">
         <h3>Your games</h3>
-        {{#each allSchedules}}
-        {{#each mySchedules}}
-        {{#each this}}
-        {{#if this.date}}
-        <div class="user-date">{{this.date}}</div>
-        <div class="user-slot">{{this.timeSlot}}</div>
-        <div class="user-hall-name">{{this.hall.name}}</div>
-        <div class="user-hall-street">{{this.hall.street}}</div>
-        <div class="user-team-name">{{this.team.teamName}}</div>
-        {{/if}}
-        {{/each}}
-        {{/each}}
-        {{/each}}
+        <br>
+        <div id="schedule-items">
+          {{#each allSchedules}}
+          {{#each mySchedules}}
+          {{#each this}}
+          {{#if this.date}}
+          <div class="user-date">{{dateFormat this.date "DD.MM.YY"}}</div>
+          <div class="user-slot">from {{this.timeSlot}}</div>
+          <div class="user-hall-name">{{this.hall.name}}</div>
+          <div class="user-hall-street">{{this.hall.street}}</div>
+          <div class="user-team-name">Team: {{this.team.teamName}}</div>
+          <div class="hr">
+            <hr>
+          </div>
+          {{/if}}
+          {{/each}}
+          {{/each}}
+          {{/each}}
+        </div>
       </div>
 
     </div>
     <div id="right-area">
       <div id="text">
-        <p>Find a sports hall</p>
-        <p>Add your ZIP</p>
-        <p>Select equipments</p>
+        <p>Entering your zip code below will give you the nearest indoor halls!</p>
       </div>
-      <div id="mapmap">
-        <div id="map-panel">
-          <div id="geocoder" class="geocoder"></div>
-          <div id='map' style='width: 600px; height: 400px;'></div>
-        </div>
+
+      <div id="map-panel">
+        <div id="geocoder" class="geocoder"></div>
+        <div id='map' style='width: 600px; height: 400px;'></div>
       </div>
+
       <div id="schedule">
         <div id="schedule-panel">
           <br><br>
@@ -98,6 +116,7 @@
     </div>
   </div>
 </div>
+
 <script>
   async function test() {
     mapboxgl.accessToken =

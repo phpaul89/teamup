@@ -20,7 +20,10 @@ router.get(
       _id: request.user._id,
     }).populate("myFriends");
 
-    response.render("team/team-signup.hbs", { user: userObjectId.myFriends });
+    response.render("team/team-signup.hbs", {
+      user: userObjectId.myFriends,
+      loggedInUser: request.user,
+    });
   }
 );
 
@@ -33,7 +36,7 @@ router.post("/team-signup", async (request, response, next) => {
   Team.findOne({ teamName }).then((exists) => {
     if (exists !== null) {
       console.log("Team exists already");
-      response.render("team/team-signup.hbs"); //, {message: "Username already exists"});
+      response.render("team/team-signup.hbs"); //, {message: "already exists"});
     } else {
       Team.create({
         teamName: teamName,
@@ -79,7 +82,7 @@ router.get(
     //const allUsers = await User.find();
     response.render("team/all-teams.hbs", {
       allTeams: allTeams,
-      //allUsers: allUsers,
+      loggedInUser: request.user,
     });
   }
 );

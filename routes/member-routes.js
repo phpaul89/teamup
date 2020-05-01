@@ -77,8 +77,10 @@ router.get(
   ensureLogin.ensureLoggedIn(),
   async (request, response) => {
     const allUsers = await User.find();
+
     response.render("member/all-members.hbs", {
       allUsers: allUsers,
+      user: request.user,
     });
   }
 );
@@ -92,21 +94,29 @@ router.post(
   "/addfriends",
   ensureLogin.ensureLoggedIn(),
   async (request, response) => {
-    console.log("request form POST :", request.body.friend); //works
     const friend = request.body.friend; // "Phil1" value
     const friendObjectId = await User.findOne({ username: friend });
-    console.log("new friend OID: ", friendObjectId); //works
-    console.log("new friend name: ", friend); //works
     const loggedInUser = request.user;
-    console.log(loggedInUser);
-    console.log(loggedInUser._id);
-    User.updateOne(
-      { _id: loggedInUser._id },
-      { $push: { myFriends: friendObjectId } }
-    ).then((user) => {
-      console.log(user);
-      response.redirect("/private");
-    });
+
+    //console.log(request.user.myFriends);
+
+    if (friendObjectId._id.equals(loggedInUser._id)) {
+      console.log("cannot add yourself!");
+      response.redirect("/private/allmembers");
+    } else if (
+      await User.find({ "request.user.myFriends._id": friendObjectId })
+    ) {
+      console.log("cannot add duplicate!");
+      response.redirect("/private/allmembers");
+    } else {
+      User.updateOne(
+        { _id: loggedInUser._id },
+        { $push: { myFriends: friendObjectId } }
+      ).then((user) => {
+        console.log(user);
+        response.redirect("/private");
+      });
+    }
   }
 );
 
@@ -161,28 +171,33 @@ router.post(
     // push this user into teamMembers
     const teamObjectId = await Team.findOne({ teamName: request.body.team });
 
-    User.updateOne(
-      { _id: request.user._id },
-      { $push: { myTeams: teamObjectId } }
-    )
-      .then((x) => {
-        Team.update(
-          { teamName: request.body.team },
-          { $push: { teamMembers: request.user._id } }
-        )
-          .then((x) => {
-            console.log(x);
-            response.redirect("/private");
-          })
-          .catch((error) => {
-            console.log(error);
-            next();
-          });
-      })
-      .catch((error) => {
-        console.log(error);
-        next();
-      });
+    if (await Team.find({ "request.user.myTeams._id": teamObjectId })) {
+      console.log("cannot join twice!");
+      response.redirect("/private/allteams");
+    } else {
+      User.updateOne(
+        { _id: request.user._id },
+        { $push: { myTeams: teamObjectId } }
+      )
+        .then((x) => {
+          Team.update(
+            { teamName: request.body.team },
+            { $push: { teamMembers: request.user._id } }
+          )
+            .then((x) => {
+              console.log(x);
+              response.redirect("/private");
+            })
+            .catch((error) => {
+              console.log(error);
+              next();
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+          next();
+        });
+    }
   }
 );
 
