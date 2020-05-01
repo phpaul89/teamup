@@ -20,41 +20,57 @@ router.get(
       _id: request.user._id,
     }).populate("myFriends");
 
-    response.render("team/team-signup.hbs", { user: userObjectId.myFriends });
+    response.render("team/team-signup.hbs", {
+      user: userObjectId.myFriends,
+      loggedInUser: request.user,
+    });
   }
 );
 
 router.post("/team-signup", async (request, response, next) => {
   // get username, password, email, then create user
-  const { teamName, teamMembers } = request.body;
+  let { teamName, teamMembers } = request.body;
 
   console.log(teamName, teamMembers);
+
+  // if (teamMembers === undefined) {
+  //   teamMembers = request.user;
+  //   console.log("made a new team with user alone");
+  // }
 
   Team.findOne({ teamName }).then((exists) => {
     if (exists !== null) {
       console.log("Team exists already");
-      response.render("team/team-signup.hbs"); //, {message: "Username already exists"});
+      response.render("team/team-signup.hbs"); //, {message: "already exists"});
     } else {
       Team.create({
         teamName: teamName,
       })
         .then((team) => {
-          console.log(team);
+          //console.log(team);
           User.updateOne(
             { _id: request.user._id },
             { $push: { myTeams: team } }
           )
-            .then((added) => {
-              console.log(teamMembers);
-              teamMembers.forEach(async (friend) => {
-                console.log(friend);
-                let friendObjectId = await User.findOne({ username: friend });
-                console.log(friendObjectId);
+            .then(async (added) => {
+              //console.log(teamMembers);
+
+              if (teamMembers == undefined) {
                 await Team.updateOne(
                   { _id: team },
-                  { $push: { teamMembers: friendObjectId } }
+                  { $push: { teamMembers: request.user } }
                 );
-              });
+              } else {
+                teamMembers.forEach(async (friend) => {
+                  //console.log(friend);
+                  let friendObjectId = await User.findOne({ username: friend });
+                  //console.log(friendObjectId);
+                  await Team.updateOne(
+                    { _id: team },
+                    { $push: { teamMembers: friendObjectId } }
+                  );
+                });
+              }
               response.redirect("/private");
             })
             .catch((error) => {
@@ -79,7 +95,7 @@ router.get(
     //const allUsers = await User.find();
     response.render("team/all-teams.hbs", {
       allTeams: allTeams,
-      //allUsers: allUsers,
+      loggedInUser: request.user,
     });
   }
 );

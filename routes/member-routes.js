@@ -77,8 +77,10 @@ router.get(
   ensureLogin.ensureLoggedIn(),
   async (request, response) => {
     const allUsers = await User.find();
+
     response.render("member/all-members.hbs", {
       allUsers: allUsers,
+      user: request.user,
     });
   }
 );
@@ -92,23 +94,53 @@ router.post(
   "/addfriends",
   ensureLogin.ensureLoggedIn(),
   async (request, response) => {
-    console.log("request form POST :", request.body.friend); //works
-    const friend = request.body.friend; // "Phil1" value
-    const friendObjectId = await User.findOne({ username: friend });
-    console.log("new friend OID: ", friendObjectId); //works
-    console.log("new friend name: ", friend); //works
-    const loggedInUser = request.user;
-    console.log(loggedInUser);
-    console.log(loggedInUser._id);
-    User.updateOne(
-      { _id: loggedInUser._id },
-      { $push: { myFriends: friendObjectId } }
-    ).then((user) => {
-      console.log(user);
-      response.redirect("/private");
+    const friendObjectId = await User.findOne({
+      username: request.body.friend,
     });
+
+    // works:
+    if (friendObjectId._id.equals(request.user._id)) {
+      console.log("cannot add yourself!");
+      response.redirect("/private/allmembers");
+    } else {
+      User.updateOne(
+        { _id: request.user._id },
+        { $push: { myFriends: friendObjectId } }
+      ).then((user) => {
+        console.log(user);
+        response.redirect("/private");
+      });
+    }
   }
 );
+
+// remove friends
+// router.post(
+//   "/removefriends",
+//   ensureLogin.ensureLoggedIn(),
+//   async (request, response) => {
+//     const removeUser = request.body.friend;
+//     const removeUserId = await User.find({ username: removeUser });
+//     const theUser = await User.find({ _id: request.user._id }).populate(
+//       "myFriends"
+//     );
+
+//     console.log(removeUserId);
+//     console.log(removeUser._id);
+//     console.log(theUser);
+
+//     User.findOne({_id: request.user._id})
+
+//     // User.update(
+//     //   { _id: request.user._id },
+//     //   { $pull: { myFriends: { $elemMatch: { _id: removeUserId._id } } } }
+//     // ).then((user) => {
+//     //   console.log(user);
+//     //   console.log("removed");
+//     //   response.redirect("/private");
+//     // });
+//   }
+// );
 
 router.get("/get-marker", async (request, response) => {
   // '.lean()' has to be added to be able to push coordinates as a new property in 'getCoordinates()'
@@ -243,6 +275,28 @@ router.get(
       hall: theHall,
       userTeams: userTeams,
       message: request.flash("error"),
+    });
+  }
+);
+
+// DOESN'T WORK?
+router.post(
+  "/removefriends/:id",
+  ensureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    console.log(request.params.id);
+    console.log(request.user._id);
+
+    const uId = await User.find({ _id: request.params.id });
+
+    User.find({ _id: request.params.id }).then((a) => {
+      User.updateMany(
+        { _id: request.user._id },
+        { $pull: { myFriends: { uId } } }
+      ).then((x) => {
+        console.log(x);
+        response.redirect("/private");
+      });
     });
   }
 );

@@ -1,17 +1,27 @@
-{{#each allUsers}}
+<div id="full" class="bg-white">
+  <div id="navigation">
+    <nav class="nav-bar">
+      <ul>
+        <li><a href="/">TeamUp</a></li>
+        <li>
+          <p>Hey, {{user.username}}</p>
+        </li>
+        <li><a href="/logout">Logout</a></li>
+      </ul>
+    </nav>
+  </div>
 
-
-<form action="/addfriends" method="POST">
-  <label for="friend">{{username}}</label>
-  <button type="submit" name="friend" value="{{username}}">+</button>
-</form>
-
-{{/each}}
-
+  <div id="add-friends">
+    <h2>Which friend do you want to add?</h2>
+    <br>
+    {{#each allUsers}}
+    <div class="friendForAdding">
+      <form action="/addfriends" method="POST">
+        <button type="submit" name="friend" value="{{username}}">+</button>
+        <label for="friend">{{username}}</label>
+      </form>
+    </div>
+    {{/each}}
+  </div>
+</div>
 <a href="/private">Go back</a>
-
-{{!-- <form action="/addfriends" method="POST">
-  <label for="friend">Potential team member:</label>
-  <input type="text" name="friend" value="{{friends.username}}">
-  <button type="submit">Add as friend</button>
-</form> --}}

@@ -1,4 +1,4 @@
-<div id="full">
+<div id="full" class="bg-white shadow-lg">
   <div id="navigation">
     <nav class="nav-bar">
       <ul>
@@ -7,51 +7,56 @@
       </ul>
     </nav>
   </div>
-  <section id="introduction">
-    <h1>Do you want to play an indoor team sport in Berlin?</h1>
-    <div id="zip-input">
-      <h2>Find a hall near you:</h2>
-      <div id="geocoder" class="geocoder"></div>
-    </div>
-  </section>
-  <div id="map-container">
-    <div id="map"></div>
+  <div id="introduction">
+    <h2>Do you want to play an indoor team sport in Berlin?</h1>
+      <div id="zip-input">
+        <h3>Find a hall near you:
+    </h2>
+    <div id="geocoder" class="geocoder"></div>
   </div>
-  <section id="hook">
-    <h2>However, if you would like to play any kind of team sport, first you need a team.</h2>
-  </section>
-  <section id="advantages">
-    <h2>With the help of TeamUp you can:</h2>
+</div>
+<div id="map-container">
+  <div id="map"></div>
+</div>
+<div id="hook">
+  <h3>However, if you would like to play any kind of team sport, first you need a team.</h2>
+</div>
+<div id="advantages">
+  <h3>With the help of TeamUp you can:</h2>
     <div id="keypoints">
       <div id="find-people">
-        <p>LOGO</p>
+        <img src="../images/find_sport_fans.png" />
         <p>Find sport fans</p>
       </div>
       <div id="build-team">
-        <p>LOGO</p>
+        <img src="../images/build_a_team.png" />
         <p>Build a team</p>
       </div>
       <div id="book-hall">
-        <p>LOGO</p>
+        <img src="../images/building.png" />
         <p>Book your hall</p>
       </div>
       <div id="have-fun">
-        <p>LOGO</p>
+        <img src="../images/have_fun_02.png" />
         <p>Have fun!</p>
       </div>
     </div>
-  </section>
-  <div id="entry">
-    <div id="join">
-      <a href="/signup" class="link-btn">Sign up</a>
-      <a href="/login" class="link-btn">Login</a>
-    </div>
-    <div id="social-login">
-      {{#unless user}}<a href="/auth/google">Google Login
-      </a>{{/unless}}
-      {{#unless user}}<a href="/auth/facebook">Facebook Login</a>{{/unless}}
-    </div>
+</div>
+<div id="entry">
+  <div id="join">
+    <a href="/signup" class="link-btn">Sign up</a>
+    <a href="/login" class="link-btn">Login</a>
   </div>
+  <div id="social-login">
+    <a href="/auth/google"><img
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/200px-Google_%22G%22_Logo.svg.png" />
+      Login
+    </a>
+  </div>
+</div>
+<footer>
+  <p>by Robert Bozsik, Phillip Paul | Ironhack 2020</p>
+</footer>
 </div>
 <script>
   // MapBox start

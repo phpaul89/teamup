@@ -1,113 +1,135 @@
-<div id="detail-panel">
-  <div class="center">
-    <div class="left-area">
-      <h1>Welcome {{user.username}}!</h1>
-      <div class="friends">
-        <h1>Your friends</h1>
-
-        {{#each friends}}
-        {{#each this}}
-        {{#if this.username}}<div class="user-friends">{{this.username}}</div>{{/if}}
-        {{/each}}
-        {{/each}}
-        <br>
-        <a href="private/allmembers">Find friends</a>
-      </div>
-      <div class="teams">
-        <h1>Your teams</h1>
-        {{#each allTeams}}
-        {{#each this}}
-        {{#if this.teamName}}<div class="user-teams">{{this.teamName}}</div>{{/if}}
-        {{/each}}
-        {{/each}}
-        <br>
-        <a href="/team-signup">Create a team</a>
-        <br>
-        <a href="/private/allteams">Find teams</a>
-      </div>
-      <div id="schedules">
-        <h1>Your games</h1>
-        {{#each allSchedules}}
-        <div class="user-schedules"></div>
-        {{#each mySchedules}}
-        {{#each this}}
-        {{#if this.date}}
-        <p>{{this.date}}</p>
-        <p>{{this.timeSlot}}</p>
-        <p>{{this.hall.name}}</p>
-        <p>{{this.hall.street}}</p>
-        <p>{{this.team.teamName}}</p>
-        {{/if}}
-        {{/each}}
-        {{/each}}
-      </div>
-      {{/each}}
-    </div>
+<div id="full" class="bg-light">
+  <div id="navigation">
+    <nav class="nav-bar">
+      <ul>
+        <li><a href="/">TeamUp</a></li>
+        <li>
+          <p>Hey, {{user.username}}</p>
+        </li>
+        <li><a href="/logout">Logout</a></li>
+      </ul>
+    </nav>
   </div>
-  <div class="right-area">
-    <div class="text">
-      <p>Find a sports hall</p>
-      <p>Add your ZIP</p>
-      <p>Select equipments</p>
+
+  <div id="center" class="bg-white">
+    <div id="left-area">
+      <div id="friends">
+        <h3>Your friends</h3>
+        <br>
+        <div id="user-friends">
+          {{#each friends}}
+          {{#each this}}
+          {{#if this.username}}
+          <div class="user-friends">{{this.username}}</div>
+          <form id="user-entry" action="/removefriends/{{this._id}}" method="POST">
+            <button type="submit" name="friend" value="{{this.username}}">-</button>
+          </form>
+          {{/if}}
+          {{/each}}
+          {{/each}}
+        </div>
+        <br>
+        <div id="friend-link"><a href="private/allmembers">Find friends</a></div>
+        <div class="hr">
+          <hr>
+        </div>
+      </div>
+
+      <div id="teams">
+        <h3>Your teams</h3>
+        <br>
+        <div id="team-members">
+          {{#each allTeams}}
+          {{#each this}}
+          {{#if this.teamName}}
+          <div class="user-teams">{{this.teamName}}</div>
+          <!--<form id="team-entry" action="/removeteams" method="POST">
+            <button type="submit" name="friend" value="{{this.teamName}}">-</button>
+          </form>-->
+          {{/if}}
+          {{/each}}
+          {{/each}}
+        </div>
+        <br>
+        <div id="team-links">
+          <a href="/team-signup">Create a team</a>
+          <a href="/private/allteams">Find teams</a>
+        </div>
+        <div class="hr">
+          <hr>
+        </div>
+      </div>
+
+      <div id="schedules">
+        <h3>Your games</h3>
+        <br>
+        <div id="schedule-items">
+          {{#each allSchedules}}
+          {{#each mySchedules}}
+          {{#each this}}
+          {{#if this.date}}
+          <div class="user-date">{{dateFormat this.date "DD.MM.YY"}}</div>
+          <div class="user-slot">from {{this.timeSlot}}</div>
+          <div class="user-hall-name">{{this.hall.name}}</div>
+          <div class="user-hall-street">{{this.hall.street}}</div>
+          <div class="user-team-name">Team: {{this.team.teamName}}</div>
+          <div class="hr">
+            <hr>
+          </div>
+          {{/if}}
+          {{/each}}
+          {{/each}}
+          {{/each}}
+        </div>
+      </div>
+
     </div>
-    <div class="mapmap">
+    <div id="right-area">
+      <div id="text">
+        <p>Entering your zip code below will give you the nearest indoor halls!</p>
+      </div>
+
       <div id="map-panel">
         <div id="geocoder" class="geocoder"></div>
         <div id='map' style='width: 600px; height: 400px;'></div>
       </div>
-    </div>
-    <div class="schedule">
-      <div id="schedule-panel">
-        <br><br>
-        <form id="schedule-form" action="/addschedule" method="POST">
-          <label for="hall-name">Selected hall:</label>
-          <input id="hall-name-selected" name="hallNameSelected" required></input>
-          <label for="testDate">Choose date:</label>
-          <input type="date" id="testDate" name="testDate" required><br><br>
-          <label for="schedule-form">Choose time:</label>
-          <select id="slots" name="slots">
-            <option id="8-9" name="8-9">8 - 9</option>
-            <option id="NineToTen" name="9-10">9 - 10</option>
-            <option id="10-11" name="10-11">10 - 11</option>
-            <option id="11-12" name="11-12">11 - 12</option>
-            <option id="12-13" name="12-13">12 - 13</option>
-          </select>
-          <label for="team-selector-choose-label">Choose team:</label>
-          <select id="team-selector-dropdown" name="teamSelectorDropDown">
-            {{#each allTeams}}
-            {{#each this}}
-            {{#if this.teamName}}<option id="{{this.teamName}}" name="{{this.teamName}}">{{this.teamName}}</option>
-            {{/if}}
-            {{/each}}
-            {{/each}}
-          </select>
-          <button type="submit">Book Hall</button>
-        </form>
+
+      <div id="schedule">
+        <div id="schedule-panel">
+          <br><br>
+          <form id="schedule-form" action="/addschedule" method="POST">
+            <label for="hall-name">Selected hall:</label>
+            <input id="hall-name-selected" name="hallNameSelected" required></input>
+            <label for="testDate">Choose date:</label>
+            <input type="date" id="testDate" name="testDate" required><br><br>
+            <label for="schedule-form">Choose time:</label>
+            <select id="slots" name="slots">
+              <option id="a" name="16-17">16 - 17</option>
+              <option id="b" name="17-18">17 - 18</option>
+              <option id="c" name="18-19">18 - 19</option>
+              <option id="d" name="19-20">19 - 20</option>
+              <option id="e" name="20-21">20 - 21</option>
+              <option id="f" name="21-22">21 - 22</option>
+            </select>
+            <label for="team-selector-choose-label">Choose team:</label>
+            <select id="team-selector-dropdown" name="teamSelectorDropDown">
+              {{#each allTeams}}
+              {{#each this}}
+              {{#if this.teamName}}<option id="{{this.teamName}}" name="{{this.teamName}}">{{this.teamName}}</option>
+              {{/if}}
+              {{/each}}
+              {{/each}}
+            </select>
+            <button type="submit">Book Hall</button>
+          </form>
+        </div>
       </div>
     </div>
-
-
   </div>
 </div>
-</div>
-<!--
-<a href="/get-marker">GET MARKER TEST</a>
-<div id="list-hall">
-  {{#each someHalls}}
-  <a href="/hall-detail/{{_id}}" id="hallName">{{name}}</a>
-  <p>{{address}}</p>
-  {{#if message}}
-  <div id="error-message">
-    {{message}}
-  </div>
-  {{/if}}
-  {{/each}}
-</div>
--->
 
 <script>
   async function test() {
-
     mapboxgl.accessToken =
       "pk.eyJ1IjoicGhwYXVsODkiLCJhIjoiY2s5anB3dnAxMDBjdzNlcDk3ZXNjb2VqNiJ9.3F5ihEH6D8CIfUm_WN1yvw";
     /* Map: This represents the map on the page. */
@@ -136,7 +158,7 @@
         .setLngLat(hall.coordinates)
         .setPopup(
           new mapboxgl.Popup({ offset: 25 }) // add popups
-            .setHTML(`Name: ${hall.name}<br>>`)
+            .setHTML(`Name: ${hall.name}<br>`)
         )
         .addTo(map);
     });
@@ -161,18 +183,42 @@
     let isAvailable = await axios.post("http://localhost:3000/spots", { date, hallName });
     console.log("the backend response:", isAvailable.data);
 
-    let checkSlotNineToTen = document.querySelector("#NineToTen").value;
-    console.log("test check: ", checkSlotNineToTen);
-
-    if (isAvailable.data == checkSlotNineToTen) {
+    let csitse = document.querySelector("#a").value;
+    //console.log("test check: ", checkSlotNineToTen);
+    if (isAvailable.data == csitse) {
       console.log("big success!");
-      document.querySelector("#NineToTen").disabled = true;
+      document.querySelector("#a").disabled = true;
+    }
+
+    let csetei = document.querySelector("#b").value;
+    if (isAvailable.data == csetei) {
+      console.log("big success!");
+      document.querySelector("#b").disabled = true;
+    }
+
+    let ceitni = document.querySelector("#c").value;
+    if (isAvailable.data == ceitni) {
+      console.log("big success!");
+      document.querySelector("#c").disabled = true;
+    }
+
+    let cnittw = document.querySelector("#d").value;
+    if (isAvailable.data == cnittw) {
+      console.log("big success!");
+      document.querySelector("#d").disabled = true;
+    }
+
+    let ctwtto = document.querySelector("#e").value;
+    if (isAvailable.data == ctwtto) {
+      console.log("big success!");
+      document.querySelector("#e").disabled = true;
+    }
+
+    let ctottt = document.querySelector("#f").value;
+    if (isAvailable.data == ctottt) {
+      console.log("big success!");
+      document.querySelector("#f").disabled = true;
     }
 
   }
 </script>
-
-<!-- categories of sport arts to be added later 
-[13.3475059, 52.4902439]-->
-<br>
-<a href="/logout">Log out</a>
