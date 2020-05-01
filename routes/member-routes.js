@@ -241,15 +241,15 @@ router.post(
     // get the value of the checkbox in popup at marker, then:
     const hallObjectId = await Hall.findOne({ name: hallNameSelected });
 
-    Schedule.create({
+    await Schedule.create({
       date: testDate,
       timeSlot: slots,
       hall: hallObjectId,
       team: teamObjectId,
     })
-      .then((schedule) => {
+      .then(async (schedule) => {
         console.log(schedule);
-        User.updateMany(
+        await User.updateMany(
           { myTeams: teamObjectId },
           { $push: { mySchedules: schedule } }
         ).then((x) => {
