@@ -180,9 +180,9 @@
     let date = value;
     let hallName = document.querySelector("#hall-name-selected").value;
 
-    let isAvailable = await axios.post("http://localhost:3000/spots", { date, hallName });
+    let isAvailable = await axios.post("https://teamup-de.herokuapp.com/spots", { date, hallName });
     console.log("the backend response:", isAvailable.data);
-
+    /*
     let csitse = document.querySelector("#a").value;
     //console.log("test check: ", checkSlotNineToTen);
     if (isAvailable.data == csitse) {
@@ -219,6 +219,6 @@
       console.log("big success!");
       document.querySelector("#f").disabled = true;
     }
-
+  */
   }
 </script>
