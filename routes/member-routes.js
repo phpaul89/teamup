@@ -241,15 +241,15 @@ router.post(
     // get the value of the checkbox in popup at marker, then:
     const hallObjectId = await Hall.findOne({ name: hallNameSelected });
 
-    await Schedule.create({
+    Schedule.create({
       date: testDate,
       timeSlot: slots,
       hall: hallObjectId,
       team: teamObjectId,
     })
-      .then(async (schedule) => {
+      .then((schedule) => {
         console.log(schedule);
-        await User.updateMany(
+        User.updateMany(
           { myTeams: teamObjectId },
           { $push: { mySchedules: schedule } }
         ).then((x) => {
@@ -340,22 +340,22 @@ router.post(
   }
 );
 
-router.post("/spots", async (request, response) => {
-  const { date, hallName } = request.body;
-  //console.log(date, hallName);
+// router.post("/spots", async (request, response) => {
+//   const { date, hallName } = request.body;
+//   console.log(date, hallName);
 
-  const hallObjectId = await Hall.findOne({ name: hallName });
+//   const hallObjectId = await Hall.findOne({ name: hallName });
 
-  //console.log(hallObjectId);
+//   //console.log(hallObjectId);
 
-  const timeSlotsFilled = await Schedule.findOne({
-    date: date,
-    hall: hallObjectId,
-  });
-  console.log(timeSlotsFilled);
-  //console.log(timeSlotsFilled.timeSlot);
+//   const timeSlotsFilled = await Schedule.findOne({
+//     date: date,
+//     hall: hallObjectId,
+//   });
+//   console.log(timeSlotsFilled);
+//   //console.log(timeSlotsFilled.timeSlot);
 
-  response.send(timeSlotsFilled.timeSlot);
-});
+//   response.send(timeSlotsFilled.timeSlot);
+// });
 
 module.exports = router;
