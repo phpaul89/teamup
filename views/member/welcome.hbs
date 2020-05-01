@@ -140,7 +140,7 @@
       center: [13.347489, 52.490202],
     });
 
-    let geojson = await axios.get(`${process.env.MONGODB_URI}/get-marker`);
+    let geojson = await axios.get("https://teamup-de.herokuapp.com/get-marker");
 
     // add markers to map
     geojson.data.forEach((hall) => {
