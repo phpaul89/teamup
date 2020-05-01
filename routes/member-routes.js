@@ -352,7 +352,7 @@ router.post("/spots", async (request, response) => {
     date: date,
     hall: hallObjectId,
   });
-
+  console.log(timeSlotsFilled);
   //console.log(timeSlotsFilled.timeSlot);
 
   response.send(timeSlotsFilled.timeSlot);
