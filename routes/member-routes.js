@@ -94,23 +94,17 @@ router.post(
   "/addfriends",
   ensureLogin.ensureLoggedIn(),
   async (request, response) => {
-    const friend = request.body.friend; // "Phil1" value
-    const friendObjectId = await User.findOne({ username: friend });
-    const loggedInUser = request.user;
+    const friendObjectId = await User.findOne({
+      username: request.body.friend,
+    });
 
-    //console.log(request.user.myFriends);
-
-    if (friendObjectId._id.equals(loggedInUser._id)) {
+    // works:
+    if (friendObjectId._id.equals(request.user._id)) {
       console.log("cannot add yourself!");
-      response.redirect("/private/allmembers");
-    } else if (
-      await User.find({ "request.user.myFriends._id": friendObjectId })
-    ) {
-      console.log("cannot add duplicate!");
       response.redirect("/private/allmembers");
     } else {
       User.updateOne(
-        { _id: loggedInUser._id },
+        { _id: request.user._id },
         { $push: { myFriends: friendObjectId } }
       ).then((user) => {
         console.log(user);
@@ -119,6 +113,34 @@ router.post(
     }
   }
 );
+
+// remove friends
+// router.post(
+//   "/removefriends",
+//   ensureLogin.ensureLoggedIn(),
+//   async (request, response) => {
+//     const removeUser = request.body.friend;
+//     const removeUserId = await User.find({ username: removeUser });
+//     const theUser = await User.find({ _id: request.user._id }).populate(
+//       "myFriends"
+//     );
+
+//     console.log(removeUserId);
+//     console.log(removeUser._id);
+//     console.log(theUser);
+
+//     User.findOne({_id: request.user._id})
+
+//     // User.update(
+//     //   { _id: request.user._id },
+//     //   { $pull: { myFriends: { $elemMatch: { _id: removeUserId._id } } } }
+//     // ).then((user) => {
+//     //   console.log(user);
+//     //   console.log("removed");
+//     //   response.redirect("/private");
+//     // });
+//   }
+// );
 
 router.get("/get-marker", async (request, response) => {
   // '.lean()' has to be added to be able to push coordinates as a new property in 'getCoordinates()'
@@ -171,33 +193,28 @@ router.post(
     // push this user into teamMembers
     const teamObjectId = await Team.findOne({ teamName: request.body.team });
 
-    if (await Team.find({ "request.user.myTeams._id": teamObjectId })) {
-      console.log("cannot join twice!");
-      response.redirect("/private/allteams");
-    } else {
-      User.updateOne(
-        { _id: request.user._id },
-        { $push: { myTeams: teamObjectId } }
-      )
-        .then((x) => {
-          Team.update(
-            { teamName: request.body.team },
-            { $push: { teamMembers: request.user._id } }
-          )
-            .then((x) => {
-              console.log(x);
-              response.redirect("/private");
-            })
-            .catch((error) => {
-              console.log(error);
-              next();
-            });
-        })
-        .catch((error) => {
-          console.log(error);
-          next();
-        });
-    }
+    User.updateOne(
+      { _id: request.user._id },
+      { $push: { myTeams: teamObjectId } }
+    )
+      .then((x) => {
+        Team.update(
+          { teamName: request.body.team },
+          { $push: { teamMembers: request.user._id } }
+        )
+          .then((x) => {
+            console.log(x);
+            response.redirect("/private");
+          })
+          .catch((error) => {
+            console.log(error);
+            next();
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+        next();
+      });
   }
 );
 
@@ -258,6 +275,28 @@ router.get(
       hall: theHall,
       userTeams: userTeams,
       message: request.flash("error"),
+    });
+  }
+);
+
+// DOESN'T WORK?
+router.post(
+  "/removefriends/:id",
+  ensureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    console.log(request.params.id);
+    console.log(request.user._id);
+
+    const uId = await User.find({ _id: request.params.id });
+
+    User.find({ _id: request.params.id }).then((a) => {
+      User.updateMany(
+        { _id: request.user._id },
+        { $pull: { myFriends: { uId } } }
+      ).then((x) => {
+        console.log(x);
+        response.redirect("/private");
+      });
     });
   }
 );

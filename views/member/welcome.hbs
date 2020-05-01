@@ -19,7 +19,12 @@
         <div id="user-friends">
           {{#each friends}}
           {{#each this}}
-          {{#if this.username}}<div class="user-friends">{{this.username}}</div>{{/if}}
+          {{#if this.username}}
+          <div class="user-friends">{{this.username}}</div>
+          <form id="user-entry" action="/removefriends/{{this._id}}" method="POST">
+            <button type="submit" name="friend" value="{{this.username}}">-</button>
+          </form>
+          {{/if}}
           {{/each}}
           {{/each}}
         </div>
@@ -36,7 +41,12 @@
         <div id="team-members">
           {{#each allTeams}}
           {{#each this}}
-          {{#if this.teamName}}<div class="user-teams">{{this.teamName}}</div>{{/if}}
+          {{#if this.teamName}}
+          <div class="user-teams">{{this.teamName}}</div>
+          <!--<form id="team-entry" action="/removeteams" method="POST">
+            <button type="submit" name="friend" value="{{this.teamName}}">-</button>
+          </form>-->
+          {{/if}}
           {{/each}}
           {{/each}}
         </div>
@@ -94,11 +104,12 @@
             <input type="date" id="testDate" name="testDate" required><br><br>
             <label for="schedule-form">Choose time:</label>
             <select id="slots" name="slots">
-              <option id="8-9" name="8-9">8 - 9</option>
-              <option id="NineToTen" name="9-10">9 - 10</option>
-              <option id="10-11" name="10-11">10 - 11</option>
-              <option id="11-12" name="11-12">11 - 12</option>
-              <option id="12-13" name="12-13">12 - 13</option>
+              <option id="a" name="16-17">16 - 17</option>
+              <option id="b" name="17-18">17 - 18</option>
+              <option id="c" name="18-19">18 - 19</option>
+              <option id="d" name="19-20">19 - 20</option>
+              <option id="e" name="20-21">20 - 21</option>
+              <option id="f" name="21-22">21 - 22</option>
             </select>
             <label for="team-selector-choose-label">Choose team:</label>
             <select id="team-selector-dropdown" name="teamSelectorDropDown">
@@ -147,7 +158,7 @@
         .setLngLat(hall.coordinates)
         .setPopup(
           new mapboxgl.Popup({ offset: 25 }) // add popups
-            .setHTML(`Name: ${hall.name}<br>>`)
+            .setHTML(`Name: ${hall.name}<br>`)
         )
         .addTo(map);
     });
@@ -172,12 +183,42 @@
     let isAvailable = await axios.post("http://localhost:3000/spots", { date, hallName });
     console.log("the backend response:", isAvailable.data);
 
-    let checkSlotNineToTen = document.querySelector("#NineToTen").value;
-    console.log("test check: ", checkSlotNineToTen);
-
-    if (isAvailable.data == checkSlotNineToTen) {
+    let csitse = document.querySelector("#a").value;
+    //console.log("test check: ", checkSlotNineToTen);
+    if (isAvailable.data == csitse) {
       console.log("big success!");
-      document.querySelector("#NineToTen").disabled = true;
+      document.querySelector("#a").disabled = true;
     }
+
+    let csetei = document.querySelector("#b").value;
+    if (isAvailable.data == csetei) {
+      console.log("big success!");
+      document.querySelector("#b").disabled = true;
+    }
+
+    let ceitni = document.querySelector("#c").value;
+    if (isAvailable.data == ceitni) {
+      console.log("big success!");
+      document.querySelector("#c").disabled = true;
+    }
+
+    let cnittw = document.querySelector("#d").value;
+    if (isAvailable.data == cnittw) {
+      console.log("big success!");
+      document.querySelector("#d").disabled = true;
+    }
+
+    let ctwtto = document.querySelector("#e").value;
+    if (isAvailable.data == ctwtto) {
+      console.log("big success!");
+      document.querySelector("#e").disabled = true;
+    }
+
+    let ctottt = document.querySelector("#f").value;
+    if (isAvailable.data == ctottt) {
+      console.log("big success!");
+      document.querySelector("#f").disabled = true;
+    }
+
   }
 </script>
