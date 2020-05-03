@@ -22,13 +22,13 @@ The app implements an AirBnb-like approach for users who like to book indoor spo
 
 2. Find friends who you want to add to your team
 
-3. Create a new team by selecting all friends who shouldget an invitation
+3. Create a new team by selecting all friends who should get an invitation
 
 4. Search in your zip area where the nearest sport hall is
 
-5. Fill out the scheduler and click "Book Hall"
+5. Click the sport hall on the map and fill out the scheduler, then click "Book Hall"
 
-6. Every team member now has this appointment in their "Your games" section
+6. Every team member now sees this appointment in their "Your games" section
 
 # Sources
 
