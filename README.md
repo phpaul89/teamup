@@ -32,8 +32,8 @@ The app implements an AirBnb-like approach for users who like to book indoor spo
 
 # Sources
 
-Node.js: http://nodejs.org
-Express.js: http://expressjs.com
-Mapbox: http://mapbox.com
-List of sport halls in Berlin: https://lsb-berlin.net/service/sportstaetten/
+Node.js: http://nodejs.org\
+Express.js: http://expressjs.com\
+Mapbox: http://mapbox.com\
+List of sport halls in Berlin: https://lsb-berlin.net/service/sportstaetten/\
 see package.json for further APIs
