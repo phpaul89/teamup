@@ -1,6 +1,6 @@
 # TeamUp
 
-This web application was made with Node.js and Express.js. It was submitted as a project during the Ironhack Bootcamp for Web Development.
+This web application was made with Node.js, Express.js and Mapbox. It was submitted as a project during the Ironhack Bootcamp for Web Development.
 
 # Project details
 
@@ -34,4 +34,6 @@ The app implements an AirBnb-like approach for users who like to book indoor spo
 
 Node.js: http://nodejs.org
 Express.js: http://expressjs.com
+Mapbox: http://mapbox.com
+List of sport halls in Berlin: https://lsb-berlin.net/service/sportstaetten/
 see package.json for further APIs
