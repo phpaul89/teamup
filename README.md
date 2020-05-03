@@ -37,3 +37,8 @@ Express.js: http://expressjs.com \
 Mapbox: http://mapbox.com \
 List of sport halls in Berlin: https://lsb-berlin.net/service/sportstaetten/ \
 see package.json for further APIs
+
+Icon for "Find sport fans": Icon made by Freepik from www.flaticon.com \
+Icon for "Build a team": Icon made by Nikita Golubev from www.flaticon.com \
+Icon for "Book your hall": Icon made by iconixar from www.flaticoncom \
+Icon for "Have fun!": Icon made by Freepik from www.flaticon.com \
